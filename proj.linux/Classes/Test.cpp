@@ -17,7 +17,6 @@
 */
 
 #include "Test.h"
-#include "GLES-Render.h"
 
 #include <stdio.h>
 
@@ -135,6 +134,8 @@ public:
 
 bool Test::MouseDown(const b2Vec2& p)
 {
+    Test::LaunchBomb();
+
     m_mouseWorld = p;
     
     if (m_mouseJoint != NULL)

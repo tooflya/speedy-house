@@ -23,6 +23,9 @@
 
 #include "Box2D/Box2D.h"
 #include "cocos2d.h"
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
 
 struct b2AABB;
 

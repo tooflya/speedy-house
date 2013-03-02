@@ -5,8 +5,8 @@ CCFLAGS = -Wall
 CXXFLAGS = -Wall
 VISIBILITY = 
 
-COCOS2DX_PATH = /home/igor/Development/cocos2d-x/cocos2dx
-COCOS_PATH = /home/igor/Development/cocos2d-x
+COCOS2DX_PATH = /home/igor/git/cocos2d-x/cocos2dx
+COCOS_PATH = /home/igor/git/cocos2d-x
 
 INCLUDES =  -I../ \
 			-I../Classes \
@@ -28,15 +28,9 @@ INCLUDES =  -I../ \
 
 DEFINES = -DLINUX
 
-OBJECTS = ../Classes/Box2DTestBed/Box2dView.o \
-			../Classes/AppDelegate.o \
-			../Classes/Box2DTestBed/GLES-Render.o \
-			../Classes/Box2DTestBed/Test.o \
-			../Classes/Box2DTestBed/TestEntries.o \
-			../Classes/testBasic.o \
+OBJECTS = ../Classes/GLES-Render.o \
+			../Classes/Test.o \
 			../Classes/VisibleRect.o \
-			../Classes/LevelScreen.o \
-			../Classes/PreloaderScreen.o \
 			./main.o 
 
 LBITS := $(shell getconf LONG_BIT)

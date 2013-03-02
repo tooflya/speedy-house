@@ -19,10 +19,6 @@
  */
 
 #include "GLES-Render.h"
-#include "cocos2d.h"
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
 
 USING_NS_CC;
 

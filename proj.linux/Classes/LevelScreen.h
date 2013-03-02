@@ -1,25 +1,79 @@
-#ifndef _CONTROLLER_H_
-#define _CONTROLLER_H_
-
 #include "cocos2d.h"
+#include "VisibleRect.h"
+#include "GLES-Render.h"
+#include "Test.h"
+#include "Car.h"
 
-USING_NS_CC;
 
-class LevelScreen : public CCLayer
+
+Settings settings;
+
+class Test;
+class Box2DView : public CCLayer
 {
+    Test*        m_test;
 public:
-	LevelScreen();
-    ~LevelScreen();
+    Box2DView(void) {
 
-    void menuCallback(CCObject * pSender);
-    void closeCallback(CCObject * pSender);
+    CCDirector* pDirector = CCDirector::sharedDirector();
+    CCPoint visibleOrigin = pDirector->getVisibleOrigin();
+    CCSize visibleSize = pDirector->getVisibleSize();
 
-    virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
-    virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
+    setTouchEnabled(true);
 
-private:
-    CCPoint m_tBeginPos;
-    CCMenu* m_pItemMenu;
+    schedule(schedule_selector(Box2DView::update));
+TestEntry g_testEntries[] =
+{
+    {"Car", Car::Create}
 };
 
-#endif
+    m_test = g_testEntries->createFcn();
+
+    this->autorelease();
+
+    this->setScale(35);
+    this->setAnchorPoint(ccp(0, 0));
+    this->setPosition(
+            ccp(visibleOrigin.x + visibleSize.width / 2,
+                    visibleOrigin.y + visibleSize.height / 3));
+    }
+   
+    void update(float pDeltaTime) {
+
+    m_test->Step(&settings);
+    }
+
+    void draw() {
+
+    CCLayer::draw();
+
+    ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position);
+
+    kmGLPushMatrix();
+
+    m_test->m_world->DrawDebugData();
+
+    kmGLPopMatrix();
+
+    CHECK_GL_ERROR_DEBUG();
+    }
+};
+
+
+
+
+
+
+
+
+
+class LevelScreen : public CCScene
+{
+public:
+	LevelScreen(void) {
+
+Box2DView* view = new Box2DView();
+    
+    this->addChild(view, 0);
+    }
+};
