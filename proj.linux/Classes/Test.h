@@ -1,55 +1,14 @@
-/*
-* Copyright (c) 2006-2009 Erin Catto http://www.box2d.org
-*
-* This software is provided 'as-is', without any express or implied
-* warranty.  In no event will the authors be held liable for any damages
-* arising from the use of this software.
-* Permission is granted to anyone to use this software for any purpose,
-* including commercial applications, and to alter it and redistribute it
-* freely, subject to the following restrictions:
-* 1. The origin of this software must not be misrepresented; you must not
-* claim that you wrote the original software. If you use this software
-* in a product, an acknowledgment in the product documentation would be
-* appreciated but is not required.
-* 2. Altered source versions must be plainly marked as such, and must not be
-* misrepresented as being the original software.
-* 3. This notice may not be removed or altered from any source distribution.
-*/
-
-#ifndef TEST_H
-#define TEST_H
-
 #include <Box2D/Box2D.h>
 #include "GLES-Render.h"
 
 #include <cstdlib>
+#include <stdio.h>
 
 class Test;
 struct Settings;
 
 typedef Test* TestCreateFcn();
 
-#define    RAND_LIMIT    32767
-
-/// Random number in range [-1,1]
-inline float32 RandomFloat()
-{
-    float32 r = (float32)(std::rand() & (RAND_LIMIT));
-    r /= RAND_LIMIT;
-    r = 2.0f * r - 1.0f;
-    return r;
-}
-
-/// Random floating point number in range [lo, hi]
-inline float32 RandomFloat(float32 lo, float32 hi)
-{
-    float32 r = (float32)(std::rand() & (RAND_LIMIT));
-    r /= RAND_LIMIT;
-    r = (hi - lo) * r + lo;
-    return r;
-}
-
-/// Test settings. Some can be controlled in the GUI.
 struct Settings
 {
     Settings() :
@@ -63,13 +22,13 @@ struct Settings
         drawPairs(0),
         drawContactPoints(0),
         drawContactNormals(0),
-        drawContactForces(1),
-        drawFrictionForces(1),
+        drawContactForces(0),
+        drawFrictionForces(0),
         drawCOMs(0),
         drawStats(0),
-        drawProfile(1),
-        enableWarmStarting(1),
-        enableContinuous(1),
+        drawProfile(0),
+        enableWarmStarting(0),
+        enableContinuous(0),
         enableSubStepping(0),
         pause(0),
         singleStep(0)
@@ -104,17 +63,6 @@ struct TestEntry
 };
 
 extern TestEntry g_testEntries[];
-// This is called when a joint in the world is implicitly destroyed
-// because an attached body is destroyed. This gives us a chance to
-// nullify the mouse joint.
-class DestructionListener : public b2DestructionListener
-{
-public:
-    void SayGoodbye(b2Fixture* fixture) { B2_NOT_USED(fixture); }
-    void SayGoodbye(b2Joint* joint);
-
-    Test* test;
-};
 
 const int32 k_maxContactPoints = 2048;
 
@@ -131,35 +79,61 @@ class Test : public b2ContactListener
 {
 public:
 
-    Test();
-    virtual ~Test();
+    Test()
+    { 
+        b2Vec2 gravity;
+        gravity.Set(0.0f, -10.0f);
+        m_world = new b2World(gravity);
+        m_bomb = NULL;
+        m_textLine = 30;
+        m_mouseJoint = NULL;
+        m_pointCount = 0;
 
-    void SetTextLine(int32 line) { m_textLine = line; }
-    void DrawTitle(int x, int y, const char *string);
-    virtual void Step(Settings* settings);
-    virtual void Keyboard(unsigned char key) { B2_NOT_USED(key); }
-    virtual void KeyboardUp(unsigned char key) { B2_NOT_USED(key); }
-    void ShiftMouseDown(const b2Vec2& p);
-    virtual bool MouseDown(const b2Vec2& p);
-    virtual void MouseUp(const b2Vec2& p);
-    void MouseMove(const b2Vec2& p);
-    void LaunchBomb();
-    void LaunchBomb(const b2Vec2& position, const b2Vec2& velocity);
-    
-    void SpawnBomb(const b2Vec2& worldPt);
-    void CompleteBombSpawn(const b2Vec2& p);
+        m_world->SetContactListener(this);
+        m_world->SetDebugDraw(&m_debugDraw);
 
-    // Let derived tests know that a joint was destroyed.
-    virtual void JointDestroyed(b2Joint* joint) { B2_NOT_USED(joint); }
+        m_stepCount = 0;
 
-    // Callbacks for derived classes.
-    virtual void BeginContact(b2Contact* contact) { B2_NOT_USED(contact); }
-    virtual void EndContact(b2Contact* contact) { B2_NOT_USED(contact); }
-    virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
-    virtual void PostSolve(const b2Contact* contact, const b2ContactImpulse* impulse)
+        b2BodyDef bodyDef;
+        m_groundBody = m_world->CreateBody(&bodyDef);
+
+        memset(&m_maxProfile, 0, sizeof(b2Profile));
+        memset(&m_totalProfile, 0, sizeof(b2Profile));
+    }
+
+    ~Test()
     {
-        B2_NOT_USED(contact);
-        B2_NOT_USED(impulse);
+        // By deleting the world, we delete the bomb, mouse joint, etc.
+        delete m_world;
+        m_world = NULL;
+    }
+
+    void Step(Settings* settings)
+    {
+        float32 timeStep = settings->hz > 0.0f ? 1.0f / settings->hz : float32(0.0f);
+
+        uint32 flags = 0;
+        flags += settings->drawShapes            * b2Draw::e_shapeBit;
+        flags += settings->drawJoints            * b2Draw::e_jointBit;
+        flags += settings->drawAABBs            * b2Draw::e_aabbBit;
+        flags += settings->drawPairs            * b2Draw::e_pairBit;
+        flags += settings->drawCOMs                * b2Draw::e_centerOfMassBit;
+        m_debugDraw.SetFlags(flags);
+
+        m_world->SetWarmStarting(settings->enableWarmStarting > 0);
+        m_world->SetContinuousPhysics(settings->enableContinuous > 0);
+        m_world->SetSubStepping(settings->enableSubStepping > 0);
+
+        m_pointCount = 0;
+
+        m_world->Step(timeStep, settings->velocityIterations, settings->positionIterations);
+
+        m_world->DrawDebugData();
+
+        if (timeStep > 0.0f)
+        {
+            ++m_stepCount;
+        }
     }
 
 public:
@@ -171,19 +145,15 @@ public:
     b2AABB m_worldAABB;
     ContactPoint m_points[k_maxContactPoints];
     int32 m_pointCount;
-    DestructionListener m_destructionListener;
     GLESDebugDraw m_debugDraw;
     int32 m_textLine;
     b2World* m_world;
     b2Body* m_bomb;
     b2MouseJoint* m_mouseJoint;
     b2Vec2 m_bombSpawnPoint;
-    bool m_bombSpawning;
     b2Vec2 m_mouseWorld;
     int32 m_stepCount;
 
     b2Profile m_maxProfile;
     b2Profile m_totalProfile;
 };
-
-#endif

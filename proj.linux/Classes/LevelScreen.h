@@ -1,6 +1,5 @@
 #include "cocos2d.h"
 #include "VisibleRect.h"
-#include "GLES-Render.h"
 #include "Test.h"
 #include "Car.h"
 

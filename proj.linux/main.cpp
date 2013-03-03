@@ -1,4 +1,3 @@
-#include "main.h"
 #include "../Classes/AppDelegate.h"
 #include "cocos2d.h"
 
@@ -22,6 +21,7 @@ int main(int argc, char **argv) {
 	eglView->setFrameSize(618, 320); // iPhone 5/2
 	// eglView->setFrameSize(2048, 1536); // iPad 4
 	// eglView->setFrameSize(1280, 768); // Nokia Lumia 920
+
 
 	return CCApplication::sharedApplication()->run();
 }

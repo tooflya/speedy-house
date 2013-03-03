@@ -28,10 +28,7 @@ INCLUDES =  -I../ \
 
 DEFINES = -DLINUX
 
-OBJECTS = ../Classes/GLES-Render.o \
-			../Classes/Test.o \
-			../Classes/VisibleRect.o \
-			./main.o 
+OBJECTS = ./main.o 
 
 LBITS := $(shell getconf LONG_BIT)
 ifeq ($(LBITS),64)
