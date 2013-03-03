@@ -1,12 +1,23 @@
 #include "cocos2d.h"
-#include "CCApplication.h"
+#include <Box2D/Box2D.h>
+
 using namespace cocos2d;
+
+#define PTM_RATIO 35
 
 class Car : public Test
 {
 public:
-    Car()
+    CCScene* mScene;
+    CCSprite* mStaticLayer;
+
+    CCSprite* carImage;
+
+    Car(CCScene* pScene, CCSprite* pStaticLayer)
     {        
+        this->mScene = pScene;
+        this->mStaticLayer = pStaticLayer;
+
         m_hz = 4.0f;
         m_zeta = 0.7f;
         m_speed = 50.0f;
@@ -157,22 +168,26 @@ public:
         {
             b2PolygonShape chassis;
             b2Vec2 vertices[8];
-            vertices[0].Set(-1.5f, -0.5f);
-            vertices[1].Set(1.5f, -0.5f);
+            vertices[0].Set(-1.5f, -1.0f);
+            vertices[1].Set(1.5f, -1.0f);
             vertices[2].Set(1.5f, 0.0f);
-            vertices[3].Set(0.0f, 0.9f);
-            vertices[4].Set(-1.15f, 0.9f);
-            vertices[5].Set(-1.5f, 0.2f);
-            chassis.Set(vertices, 6);
+            vertices[3].Set(-1.5f, 0.0f);
+            chassis.Set(vertices, 4);
 
             b2CircleShape circle;
             circle.m_radius = 0.4f;
 
+            carImage = CCSprite::create("car.png");
+
             b2BodyDef bd;
+            bd.userData = carImage;
             bd.type = b2_dynamicBody;
-            bd.position.Set(0.0f, 1.0f);
+            bd.position.Set(0.0f, 1.5f);
             m_car = m_world->CreateBody(&bd);
             m_car->CreateFixture(&chassis, 1.0f);
+
+            this->mScene->addChild(carImage);
+            this->mScene->addChild(mStaticLayer);
 
             b2FixtureDef fd;
             fd.shape = &circle;
@@ -206,13 +221,10 @@ public:
             jd.dampingRatio = m_zeta;
             m_spring2 = (b2WheelJoint*)m_world->CreateJoint(&jd);
         }
-
-        m_spring1->SetMotorSpeed(-m_speed);
     }
 
     void Keyboard(unsigned char key)
     {
-        m_spring1->SetMotorSpeed(m_speed);
         switch (key)
         {
         case 'a':
@@ -243,19 +255,18 @@ public:
 
     void Step(Settings* settings)
     {
-        m_debugDraw.DrawString(5, m_textLine, "Keys: left = a, brake = s, right = d, hz down = q, hz up = e");
-        m_textLine += 15;
-        m_debugDraw.DrawString(5, m_textLine, "frequency = %g hz, damping ratio = %g", m_hz, m_zeta);
-        m_textLine += 15;
-
         settings->viewCenter.x = m_car->GetPosition().x;
+        settings->viewCenter.y = m_car->GetPosition().y;
+
         Test::Step(settings);
+
+        //carImage->setPosition(ccp((m_car->GetPosition().x+18.5) * PTM_RATIO, (m_car->GetPosition().y+8.7) * PTM_RATIO));
+        //carImage->setRotation(-1 * CC_RADIANS_TO_DEGREES(m_car->GetAngle()));
+
+        this->mScene->setPosition(ccp(-m_car->GetPosition().x * PTM_RATIO, -m_car->GetPosition().y * PTM_RATIO));
+        this->mStaticLayer->setPosition(ccp(120 + (m_car->GetPosition().x * PTM_RATIO), 120 + (m_car->GetPosition().y * PTM_RATIO)));
     }
 
-    static Test* Create()
-    {
-        return new Car;
-    }
 
     b2Body* m_car;
     b2Body* m_wheel1;

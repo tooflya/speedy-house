@@ -1,5 +1,5 @@
 #include <Box2D/Box2D.h>
-#include "GLES-Render.h"
+#include "GLES-Render.cpp"
 
 #include <cstdlib>
 #include <stdio.h>
@@ -27,8 +27,8 @@ struct Settings
         drawCOMs(0),
         drawStats(0),
         drawProfile(0),
-        enableWarmStarting(0),
-        enableContinuous(0),
+        enableWarmStarting(1),
+        enableContinuous(1),
         enableSubStepping(0),
         pause(0),
         singleStep(0)
@@ -56,14 +56,6 @@ struct Settings
     int32 singleStep;
 };
 
-struct TestEntry
-{
-    const char *name;
-    TestCreateFcn *createFcn;
-};
-
-extern TestEntry g_testEntries[];
-
 const int32 k_maxContactPoints = 2048;
 
 struct ContactPoint
@@ -73,6 +65,40 @@ struct ContactPoint
     b2Vec2 normal;
     b2Vec2 position;
     b2PointState state;
+};
+
+
+
+class QueryCallback : public b2QueryCallback
+{
+public:
+    QueryCallback(const b2Vec2& point)
+    {
+        m_point = point;
+        m_fixture = NULL;
+    }
+
+    bool ReportFixture(b2Fixture* fixture)
+    {
+        b2Body* body = fixture->GetBody();
+        if (body->GetType() == b2_dynamicBody)
+        {
+            bool inside = fixture->TestPoint(m_point);
+            if (inside)
+            {
+                m_fixture = fixture;
+
+                // We are done, terminate the query.
+                return false;
+            }
+        }
+
+        // Continue the query.
+        return true;
+    }
+
+    b2Vec2 m_point;
+    b2Fixture* m_fixture;
 };
 
 class Test : public b2ContactListener
@@ -135,6 +161,76 @@ public:
             ++m_stepCount;
         }
     }
+
+
+
+
+
+
+
+
+bool MouseDown(const b2Vec2& p)
+{
+    m_mouseWorld = p;
+    
+    if (m_mouseJoint != NULL)
+    {
+        return false;
+    }
+
+    // Make a small box.
+    b2AABB aabb;
+    b2Vec2 d;
+    d.Set(0.001f, 0.001f);
+    aabb.lowerBound = p - d;
+    aabb.upperBound = p + d;
+
+    QueryCallback callback(p);
+    m_world->QueryAABB(&callback, aabb);
+
+    if (callback.m_fixture)
+    {
+        b2Body* body = callback.m_fixture->GetBody();
+        b2MouseJointDef md;
+        md.bodyA = m_groundBody;
+        md.bodyB = body;
+        md.target = p;
+        md.maxForce = 1000.0f * body->GetMass();
+        m_mouseJoint = (b2MouseJoint*)m_world->CreateJoint(&md);
+        body->SetAwake(true);
+        return true;
+    }
+    return false;
+}
+
+void ShiftMouseDown(const b2Vec2& p)
+{
+    m_mouseWorld = p;
+    
+    if (m_mouseJoint != NULL)
+    {
+        return;
+    }
+}
+
+void MouseUp(const b2Vec2& p)
+{
+    if (m_mouseJoint)
+    {
+        m_world->DestroyJoint(m_mouseJoint);
+        m_mouseJoint = NULL;
+    }
+}
+
+void MouseMove(const b2Vec2& p)
+{
+    m_mouseWorld = p;
+    
+    if (m_mouseJoint)
+    {
+        m_mouseJoint->SetTarget(p);
+    }
+}
 
 public:
     friend class DestructionListener;
