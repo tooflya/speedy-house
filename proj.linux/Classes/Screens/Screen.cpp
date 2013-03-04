@@ -1,25 +1,18 @@
-#include "cocos2d.h"
+#ifndef CONST_SCREEN
+#define CONST_SCREEN
 
-using namespace cocos2d;
+#include "cocos2d.h"
+#include "../Entities/Entity.cpp"
 
 class Screen : public CCScene
 {
     public:
-
-        CCSprite* mBackground;
+        Entity* mBackground;
 
         Screen()
         {
 			this->scheduleUpdate();
         }
-
-        ~Screen()
-        {
-
-        }
-
-        virtual void update(float pDeltaTime)
-        {
-
-        }
 };
+
+#endif;

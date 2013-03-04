@@ -9,14 +9,12 @@ class Car : public Test
 {
 public:
     CCScene* mScene;
-    CCSprite* mStaticLayer;
 
     CCSprite* carImage;
 
-    Car(CCScene* pScene, CCSprite* pStaticLayer)
+    Car(CCScene* pScene)
     {        
         this->mScene = pScene;
-        this->mStaticLayer = pStaticLayer;
 
         m_hz = 4.0f;
         m_zeta = 0.7f;
@@ -177,17 +175,17 @@ public:
             b2CircleShape circle;
             circle.m_radius = 0.4f;
 
-            carImage = CCSprite::create("car.png");
+            //carImage = CCSprite::create("car.png");
 
             b2BodyDef bd;
-            bd.userData = carImage;
+            //bd.userData = carImage;
             bd.type = b2_dynamicBody;
             bd.position.Set(0.0f, 1.5f);
             m_car = m_world->CreateBody(&bd);
             m_car->CreateFixture(&chassis, 1.0f);
 
-            this->mScene->addChild(carImage);
-            this->mScene->addChild(mStaticLayer);
+            //this->mScene->addChild(carImage);
+            //this->mScene->addChild(mStaticLayer);
 
             b2FixtureDef fd;
             fd.shape = &circle;
@@ -221,6 +219,8 @@ public:
             jd.dampingRatio = m_zeta;
             m_spring2 = (b2WheelJoint*)m_world->CreateJoint(&jd);
         }
+
+        m_spring1->SetMotorSpeed(-m_speed);
     }
 
     void Keyboard(unsigned char key)
@@ -264,7 +264,7 @@ public:
         //carImage->setRotation(-1 * CC_RADIANS_TO_DEGREES(m_car->GetAngle()));
 
         this->mScene->setPosition(ccp(-m_car->GetPosition().x * PTM_RATIO, -m_car->GetPosition().y * PTM_RATIO));
-        this->mStaticLayer->setPosition(ccp(120 + (m_car->GetPosition().x * PTM_RATIO), 120 + (m_car->GetPosition().y * PTM_RATIO)));
+       // this->mStaticLayer->setPosition(ccp(120 + (m_car->GetPosition().x * PTM_RATIO), 120 + (m_car->GetPosition().y * PTM_RATIO)));
     }
 
 

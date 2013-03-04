@@ -2,8 +2,6 @@
 
 #include "Screens/MainMenu.cpp"
 
-using namespace cocos2d;
-
 class Preloader : public Screen
 {
 	private:
@@ -18,7 +16,7 @@ class Preloader : public Screen
 			this->mNumberOfLoadedSprites = 0;
 			this->mNumberOfSprites = 1;
 
-			this->mBackground = CCSprite::create("start-preloader-bg.png");
+			this->mBackground = new Entity("start-preloader-bg.png");
 			this->mBackground->setPosition(ccp(240, 160));
 			this->addChild(this->mBackground);
 
@@ -39,7 +37,7 @@ class Preloader : public Screen
 			this->mBackground->addChild(this->mProgressTimer);
 			this->mBackground->addChild(progressBackgroundLayer2);
 
-			this->mProgressTimer->runAction(CCProgressTo::create(1, 100));
+			this->mProgressTimer->runAction(CCProgressTo::create(0.1, 100));
 
 			CCTextureCache::sharedTextureCache()->addImageAsync("start-preloader-bg.png", this, callfuncO_selector(Preloader::loadingCallBack));
 		

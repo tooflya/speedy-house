@@ -1,7 +1,7 @@
 #include "cocos2d.h"
 #include "VisibleRect.cpp"
 #include "Test.cpp"
-#include "Car.cpp"
+#include "./Entities/Car.cpp"
 
 
 
@@ -12,7 +12,7 @@ class Box2DView : public CCLayer
 {
     Car*        mCar;
 public:
-    Box2DView(CCScene* pScene, CCSprite* pStaticLayer) {
+    Box2DView(CCScene* pScene) {
 
     CCDirector* pDirector = CCDirector::sharedDirector();
     CCPoint visibleOrigin = pDirector->getVisibleOrigin();
@@ -23,7 +23,7 @@ public:
 
     schedule(schedule_selector(Box2DView::update));
 
-    mCar = new Car(pScene, pStaticLayer);
+    mCar = new Car(pScene);
 
     this->autorelease();
 
@@ -95,14 +95,12 @@ void ccTouchEnded(CCTouch* touch, CCEvent* event) {
 
 
 
-class LevelScreen : public CCScene
+class Level : public Screen
 {
 public:
-	LevelScreen(void) {
+	Level() {
 
-        CCSprite* staticsprite = CCSprite::create("pedal-gas-normal.png");
-
-Box2DView* view = new Box2DView(this, staticsprite);
+Box2DView* view = new Box2DView(this);
     
     this->addChild(view, 10);
     }

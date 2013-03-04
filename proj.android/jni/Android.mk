@@ -6,16 +6,7 @@ LOCAL_MODULE := game_shared
 
 LOCAL_MODULE_FILENAME := libgame
 
-LOCAL_SRC_FILES := hellocpp/main.cpp \
-			../../Classes/Box2DTestBed/Box2dView.cpp \
-			../../Classes/AppDelegate.cpp \
-			../../Classes/Box2DTestBed/GLES-Render.cpp \
-			../../Classes/Box2DTestBed/Test.cpp \
-			../../Classes/Box2DTestBed/TestEntries.cpp \
-			../../Classes/testBasic.cpp \
-			../../Classes/VisibleRect.cpp \
-			../../Classes/LevelScreen.cpp \
-			../../Classes/PreloaderScreen.cpp
+LOCAL_SRC_FILES := hellocpp/main.cpp
                    
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes                   
 

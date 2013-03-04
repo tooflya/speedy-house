@@ -1,5 +1,3 @@
-#include "CCApplication.cpp"
-
 #include <vector>
 
 #include "cocos2d.h"
@@ -8,8 +6,6 @@
 #include "Screens/Preloader.cpp"
 
 using namespace std;
-
-#define COCOS2D_DEBUG 1
 
 typedef struct tagResource {
 	cocos2d::CCSize size;
@@ -35,12 +31,12 @@ class AppDelegate: private cocos2d::CCApplication
 
 			vector <string> searchPath;
 
-			if(screenSize.width > Resources1024x720.size.width)
+			if(screenSize.width > Resources1024x720.size.width && false)
 			{
 				searchPath.push_back(Resources2048x1536.directory);
 				director->setContentScaleFactor(Resources2048x1536.size.height / designResolutionSize.height);
 			}
-			else if(screenSize.width > Resources480x320.size.width)
+			else if(screenSize.width > Resources480x320.size.width && false)
 			{
 				searchPath.push_back(Resources1024x720.directory);
 				director->setContentScaleFactor(Resources1024x720.size.height / designResolutionSize.height);
@@ -53,7 +49,7 @@ class AppDelegate: private cocos2d::CCApplication
 
 			CCFileUtils::sharedFileUtils()->setSearchPaths(searchPath);
 
-			director->setDisplayStats(false);
+			director->setDisplayStats(true);
 			director->setAnimationInterval(1.0 / 60);
 
 			Screen* pScene = new Preloader();
