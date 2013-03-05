@@ -3,6 +3,10 @@
 
 #include "cocos2d.h"
 
+#include <list>
+
+using namespace std;
+
 class PopupScreen : public CCLayer
 {
 	protected:
@@ -13,6 +17,8 @@ class PopupScreen : public CCLayer
 
 		Entity* mBackgroundCircle;
 		Entity* mBackground;
+		
+		list<Entity>* mAnimationElements;
 
 	public:
 		PopupScreen()
@@ -27,6 +33,8 @@ class PopupScreen : public CCLayer
 
 			this->mAnimationNeedHide = false;
 
+			this->mAnimationElements = new list<Entity>;
+			
 			this->scheduleUpdate();
 		}
 
