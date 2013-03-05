@@ -43,21 +43,13 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 
 	public:
 		Entity();
-
 		Entity(const char* pszFileName);
-
 		Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount);
-
 		Entity(int pX, int pY, const char* pszFileName);
-
 		Entity(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount);
-
 		Entity(const char* pszFileName, CCNode* pParent);
-
 		Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent);
-
 		Entity(int pX, int pY, const char* pszFileName, CCNode* pParent);
-
 		Entity(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent);
 
 		/**

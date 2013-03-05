@@ -3,12 +3,9 @@
 
 #include "cocos2d.h"
 
-#include "../Entities/Entity.h"
+#include "Entity.h"
 
 using namespace cocos2d;
-
-
-//#include "../Utils/Utils.cpp"
 
 class Screen : public CCScene
 {

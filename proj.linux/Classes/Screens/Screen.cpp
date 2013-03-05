@@ -3,10 +3,10 @@
 
 #include "Screen.h"
 
-		Screen::Screen()
-		{
-			this->scheduleUpdate();
-		}
+	Screen::Screen()
+	{
+		this->scheduleUpdate();
+	}
 
 
 #endif

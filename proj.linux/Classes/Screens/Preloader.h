@@ -20,7 +20,6 @@ class Preloader : public Screen
 		Preloader(void);
 
 		void loadingCallBack(CCObject *obj);
-
 		bool checkIsTexturesLoaded();
 
 		virtual void update(float pDeltaTime);

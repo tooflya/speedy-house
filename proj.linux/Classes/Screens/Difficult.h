@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 
 #include "PopupScreen.h"
-#include "../Utils/Utils.h"
+#include "Utils.h"
 
 using namespace cocos2d;
 
@@ -20,8 +20,8 @@ class Difficult : public PopupScreen
 			bool mIsAnimationReverse;
 
 		public:
-			ChoiseButton(const char* pszFileName) :
-				Entity(pszFileName, 1, 1)
+			ChoiseButton(int pX, int pY, const char* pszFileName, CCNode* pParent) :
+				Entity(pX, pY, pszFileName, pParent)
 				{
 					this->setRegisterAsTouchable(true);
 
@@ -65,8 +65,8 @@ class Difficult : public PopupScreen
 	class EasyButton : public ChoiseButton
 	{
 		public:
-			EasyButton(const char* pszFileName) :
-				ChoiseButton(pszFileName)
+			EasyButton(int pX, int pY, const char* pszFileName, CCNode* pParent) :
+				ChoiseButton(pX, pY, pszFileName, pParent)
 				{
 				};
 
@@ -78,8 +78,8 @@ class Difficult : public PopupScreen
 	class NormalButton : public ChoiseButton
 	{
 		public:
-			NormalButton(const char* pszFileName) :
-				ChoiseButton(pszFileName)
+			NormalButton(int pX, int pY, const char* pszFileName, CCNode* pParent) :
+				ChoiseButton(pX, pY, pszFileName, pParent)
 				{
 				};
 
@@ -91,8 +91,8 @@ class Difficult : public PopupScreen
 	class HardButton : public ChoiseButton
 	{
 		public:
-			HardButton(const char* pszFileName) :
-				ChoiseButton(pszFileName)
+			HardButton(int pX, int pY, const char* pszFileName, CCNode* pParent) :
+				ChoiseButton(pX, pY, pszFileName, pParent)
 				{
 				};
 
@@ -107,8 +107,8 @@ class Difficult : public PopupScreen
 			Difficult* mParentClass;
 
 		public:
-			BackButton(const char* pszFileName, Difficult* pParentClass) :
-				Entity(pszFileName, 1, 1)
+			BackButton(int pX, int pY, const char* pszFileName, CCNode* pParent, Difficult* pParentClass) :
+				Entity(pX, pY, pszFileName, pParent)
 				{
 					this->mParentClass = pParentClass;
 
@@ -130,6 +130,9 @@ class Difficult : public PopupScreen
 
 	public:
 		Difficult();
+		Difficult(CCNode* pParent);
+
+		virtual void init(CCNode* pParent);
 };
 
 #endif

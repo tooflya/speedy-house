@@ -3,9 +3,9 @@
 
 #include "cocos2d.h"
 
-using namespace cocos2d;
+#include "Entity.h"
 
-#include "../Entities/Entity.h"
+using namespace cocos2d;
 
 class EntityManager : public CCArray
 {
@@ -20,7 +20,6 @@ class EntityManager : public CCArray
 
 	public:
 		EntityManager(int pCreateCount, Entity* pEntity, CCNode* pScreen);
-
 		EntityManager(int pCreateCount, int pMaxCount, Entity* pEntity, CCNode* pScreen);
 
 		Entity* create();

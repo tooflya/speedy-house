@@ -5,8 +5,8 @@
 
 #include <vector>
 
-#include "Screens/Screen.h"
-#include "Screens/Preloader.h"
+#include "Screen.h"
+#include "Preloader.h"
 
 using namespace std;
 using namespace cocos2d;
@@ -19,18 +19,14 @@ typedef struct tagResource {
 static Resource Resources480x320  	= { CCSizeMake(480, 320),  "480x320"   };
 static Resource Resources1024x720 	= { CCSizeMake(1024, 720), "1024x720"  };
 static Resource Resources2048x1536  = { CCSizeMake(2048, 1536),"2048x1536" };
-static CCSize designResolutionSize = CCSizeMake(480, 320);
+static CCSize designResolutionSize  = CCSizeMake(480, 320);
 
 class AppDelegate : private CCApplication
 {
 	public:
-		AppDelegate();
-		~AppDelegate();
-
 		bool applicationDidFinishLaunching();
 
 		void applicationDidEnterBackground();
-
 		void applicationWillEnterForeground();
 };
 

@@ -3,35 +3,27 @@
 
 #include "Difficult.h"
 
+void Difficult::init(CCNode* pParent)
+{
+	this->mBackground   = new Entity(240, 160, "difficulty-menu-popup.png", this);
 
-		Difficult::Difficult()
-		{
-			this->mBackground = new Entity("difficulty-menu-popup.png");
+	this->mEasyButton   = new EasyButton(165, 200, "difficulty-menu-btn-easy.png", this->mBackground);
+	this->mNormalButton = new NormalButton(165, 150, "difficulty-menu-btn-normal.png", this->mBackground);
+	this->mHardButton   = new HardButton(165, 100, "difficulty-menu-btn-expert.png", this->mBackground);
 
-			this->mEasyButton   = new EasyButton("difficulty-menu-btn-easy.png");
-			this->mNormalButton = new NormalButton("difficulty-menu-btn-normal.png");
-			this->mHardButton   = new HardButton("difficulty-menu-btn-expert.png");
+	this->mBackButton   = new BackButton(40, 40, "difficulty-menu-btn-back.png", this, this);
 
-			this->mBackButton   = new BackButton("difficulty-menu-btn-back.png", this);
+	this->create();
+}
 
-			this->mBackground->setPosition(ccp(240, 160));
+Difficult::Difficult()
+{
+	this->init(NULL);
+}
 
-			this->mEasyButton->setPosition(ccp(165, 200));
-			this->mHardButton->setPosition(ccp(165, 100));
-			this->mNormalButton->setPosition(ccp(165, 150));
-
-			this->mBackButton->setPosition(ccp(40, 40));
-
-			this->addChild(this->mBackground);
-
-			this->mBackground->addChild(this->mHardButton);
-			this->mBackground->addChild(this->mEasyButton);
-			this->mBackground->addChild(this->mNormalButton);
-
-			this->addChild(this->mBackButton);
-
-			this->create();
-		}
-
+Difficult::Difficult(CCNode* pParent)
+{
+	this->init(pParent);
+}
 
 #endif

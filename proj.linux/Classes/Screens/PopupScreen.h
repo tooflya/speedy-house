@@ -3,9 +3,9 @@
 
 #include "cocos2d.h"
 
-#include "../Entities/Entity.h"
-#include "../Managers/EntityManager.h"
-#include "../Utils/Utils.h"
+#include "Entity.h"
+#include "EntityManager.h"
+#include "Utils.h"
 
 using namespace cocos2d;
 
@@ -61,15 +61,15 @@ class PopupScreen : public CCLayer
 
 	public:
 		PopupScreen();
+		PopupScreen(CCNode* pParent);
 
+		virtual void init(CCNode* pParent);
+		
 		void create();
-
 		void show();
-
 		void hide();
 
 		virtual void update(float pDeltaTime);
-
 		virtual void draw();
 };
 

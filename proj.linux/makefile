@@ -10,7 +10,10 @@ COCOS_PATH = /home/igor/Development/cocos2d-x
 
 INCLUDES =  -I../ \
 			-I../Classes \
-			-I../Classes/headers \
+			-I../Classes/Screens \
+			-I../Classes/Managers \
+			-I../Classes/Entities \
+			-I../Classes/Utils \
 			-I$(COCOS2DX_PATH) \
 			-I$(COCOS2DX_PATH)/platform/third_party/linux \
 			-I$(COCOS2DX_PATH)/platform/third_party/linux/libfreetype2 \
@@ -76,7 +79,7 @@ debug: CCFLAGS += -g3 -O0
 debug: CXXFLAGS += -g3 -O0
 debug: SHAREDLIBS += -L$(COCOS_PATH)/lib/linux/Debug -lcocos2d -lrt -lz -lcocosdenshion
 debug: SHAREDLIBS += -Wl,-rpath,$(COCOS_PATH)/lib/linux/Debug/
-debug: DEFINES += -DDEBUG -DCOCOS2D_DEBUG=1
+debug: DEFINES += -DDEBUG -DCOCOS2D_DEBUG=0
 debug: $(TARGET)
 
 release: BIN_DIR = $(BIN_DIR_ROOT)/release

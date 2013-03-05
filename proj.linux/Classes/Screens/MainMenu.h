@@ -1,11 +1,10 @@
 #ifndef CONST_MAINMENU_H
 #define CONST_MAINMENU_H
 
-#include "Difficult.h"
-
 #include "cocos2d.h"
 
 #include "Screen.h"
+#include "Difficult.h"
 
 using namespace cocos2d;
 
@@ -224,25 +223,24 @@ class MainMenu : public Screen
 	};
 
 
-		public:
-			Entity* mBackground2;
-			Entity* mSocialButtonsBackground;
+	public:
+		Entity* mBackground2;
+		Entity* mSocialButtonsBackground;
 
-			PlayButton* mPlayButton;
-			Entity* mShopButton;
-			Entity* mAchievementsButton;
-			SettingsButton* mSettingsButton;
-			Entity* mMoreGamesButton;
-			Entity* mTwitterButton;
-			Entity* mFacebookButton;
-			SoundButton* mSoundButton;
-			MusicButton* mMusicButton;
-			CreditsButton* mCreditsButton;
+		PlayButton* mPlayButton;
+		Entity* mShopButton;
+		Entity* mAchievementsButton;
+		SettingsButton* mSettingsButton;
+		Entity* mMoreGamesButton;
+		Entity* mTwitterButton;
+		Entity* mFacebookButton;
+		SoundButton* mSoundButton;
+		MusicButton* mMusicButton;
+		CreditsButton* mCreditsButton;
 
-			Difficult* mDifficultScreen;
+		Difficult* mDifficultScreen;
 
-
-			MainMenu(void);
+		MainMenu();
 };
 
 #endif
