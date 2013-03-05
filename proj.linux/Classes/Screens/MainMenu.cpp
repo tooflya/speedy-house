@@ -2,8 +2,7 @@
 #define CONST_MAINMENU
 
 #include "cocos2d.h"
-
-
+#include "Difficult.cpp"
 
 class MainMenu : public Screen
 {
@@ -36,7 +35,7 @@ class MainMenu : public Screen
 
 					this->mIsMoved = false;
 
-	    			this->setPosition(ccp(mAnimationPositionX1, 40));
+					this->setPosition(ccp(mAnimationPositionX1, 40));
 				};
 
 			void onTouch(CCTouch* touch, CCEvent* event)
@@ -90,7 +89,7 @@ class MainMenu : public Screen
 
 					this->mIsMoved = false;
 
-	    			this->setPosition(ccp(mAnimationPositionX1, 40));
+					this->setPosition(ccp(mAnimationPositionX1, 40));
 				};
 
 			void onTouch(CCTouch* touch, CCEvent* event)
@@ -138,7 +137,7 @@ class MainMenu : public Screen
 
 					this->mIsMoved = false;
 
-	    			this->setPosition(ccp(mAnimationPositionX1, 40));
+					this->setPosition(ccp(mAnimationPositionX1, 40));
 				};
 
 			void onTouch(CCTouch* touch, CCEvent* event)
@@ -211,11 +210,31 @@ class MainMenu : public Screen
 			}
 	};
 
+	class PlayButton : public Entity
+	{
+		protected:
+			MainMenu* mParentClass;
+
+		public:
+			PlayButton(const char* pszFileName, MainMenu* pParentClass) :
+				Entity(pszFileName, 1, 1)
+				{
+					this->mParentClass = pParentClass;
+
+					this->setRegisterAsTouchable(true);
+				};
+
+			void onTouch(CCTouch* touch, CCEvent* event)
+			{
+				this->mParentClass->mDifficultScreen->show();
+			}
+	};
+
 	protected:
 		CCSprite* mBackground2;
 		CCSprite* mSocialButtonsBackground;
 
-		SoundButton* mPlayButton;
+		PlayButton* mPlayButton;
 		SoundButton* mShopButton;
 		SoundButton* mAchievementsButton;
 		SettingsButton* mSettingsButton;
@@ -225,6 +244,8 @@ class MainMenu : public Screen
 		SoundButton* mSoundButton;
 		MusicButton* mMusicButton;
 		CreditsButton* mCreditsButton;
+
+		Difficult* mDifficultScreen;
 
 	public:
 		MainMenu(void)
@@ -245,7 +266,7 @@ class MainMenu : public Screen
 			this->mAchievementsButton->setPosition(ccp(280, 120));
 			this->mBackground2->addChild(this->mAchievementsButton);
 
-			this->mPlayButton = new SoundButton("main-menu-btn-play.png");
+			this->mPlayButton = new PlayButton("main-menu-btn-play.png", this);
 			this->mPlayButton->setPosition(ccp(240, 160));
 			this->mBackground2->addChild(this->mPlayButton);
 
@@ -265,19 +286,29 @@ class MainMenu : public Screen
 			this->mFacebookButton->setPosition(ccp(440, 40));
 			this->mBackground2->addChild(this->mFacebookButton);
 
-    		this->mSoundButton = new SoundButton("main-menu-btn-sound-sprite.png", 1, 2);
+			this->mSoundButton = new SoundButton("main-menu-btn-sound-sprite.png", 1, 2);
 			this->mBackground2->addChild(this->mSoundButton);
 
-    		this->mMusicButton = new MusicButton("main-menu-btn-melody-sprite.png", 1, 2);
+			this->mMusicButton = new MusicButton("main-menu-btn-melody-sprite.png", 1, 2);
 			this->mBackground2->addChild(this->mMusicButton);
 
-    		this->mCreditsButton = new CreditsButton("main-menu-btn-credits.png");
+			this->mCreditsButton = new CreditsButton("main-menu-btn-credits.png");
 			this->mBackground2->addChild(this->mCreditsButton);
 
 			this->mSettingsButton = new SettingsButton("main-menu-btn-settings.png", this);
 			this->mSettingsButton->setPosition(ccp(40, 40));
 			this->mBackground2->addChild(this->mSettingsButton);
+
+			/**
+			 *
+			 * Popup screen management
+			 *
+			 */
+
+			 this->mDifficultScreen = new Difficult();
+
+			 this->addChild(this->mDifficultScreen);
 		}
 };
 
-#endif;
+#endif

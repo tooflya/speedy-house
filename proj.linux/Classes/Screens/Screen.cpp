@@ -6,13 +6,13 @@
 
 class Screen : public CCScene
 {
-    public:
-        Entity* mBackground;
+	public:
+		Entity* mBackground;
 
-        Screen()
-        {
+		Screen()
+		{
 			this->scheduleUpdate();
-        }
+		}
 };
 
-#endif;
+#endif

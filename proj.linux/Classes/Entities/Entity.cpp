@@ -40,6 +40,8 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 		Entity(const char* pszFileName)
 		{
 			this->initWithFile(pszFileName);
+
+			this->scheduleUpdate();
 		}
 
 		Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount)
@@ -98,10 +100,12 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 			this->mAnimationScaleDownTime = 0.2;
 			this->mAnimationScaleUpTime = 0.2;
 
-			this->mAnimationScaleDownFactor = 0.7;
+			this->mAnimationScaleDownFactor = 0.8;
 			this->mAnimationScaleUpFactor = 1.0;
 
 			this->mIsRegisterAsTouchable = false;
+
+			this->scheduleUpdate();
 		}
 
 		int getCurrentFrameIndex()
@@ -138,27 +142,27 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 
 		void onEnter()
 		{
-		    CCDirector* pDirector = CCDirector::sharedDirector();
-		    pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
-		    CCSprite::onEnter();
+			CCDirector* pDirector = CCDirector::sharedDirector();
+			pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+			CCSprite::onEnter();
 		}
 
 		void onExit()
 		{
-		    CCDirector* pDirector = CCDirector::sharedDirector();
-		    pDirector->getTouchDispatcher()->removeDelegate(this);
-		    CCSprite::onExit();
+			CCDirector* pDirector = CCDirector::sharedDirector();
+			pDirector->getTouchDispatcher()->removeDelegate(this);
+			CCSprite::onExit();
 		}
 
 		bool ccTouchBegan(CCTouch* touch, CCEvent* event)
 		{
-			if(!this->mIsRegisterAsTouchable)
+			if(!this->mIsRegisterAsTouchable || !this->isVisible())
 			{
 				return false;
 			}
 
-    		if(containsTouchLocation(touch))
-    		{
+			if(containsTouchLocation(touch))
+			{
 				this->mWasTouched = true;
 
 				this->runAction(CCScaleTo::create(this->mAnimationScaleDownTime, this->mAnimationScaleDownFactor));
@@ -166,7 +170,7 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 				return true;
 			}
 
-		    return false;
+			return false;
 		}
 
 		void ccTouchMoved(CCTouch* touch, CCEvent* event)
@@ -199,16 +203,21 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 
 		bool containsTouchLocation(CCTouch* touch)
 		{
-		    return CCRectMake(-this->mFrameWidth/ 2, -this->mFrameHeight / 2, this->mFrameWidth, this->mFrameHeight).containsPoint(convertTouchToNodeSpaceAR(touch));
+			return CCRectMake(-this->mFrameWidth/ 2, -this->mFrameHeight / 2, this->mFrameWidth, this->mFrameHeight).containsPoint(convertTouchToNodeSpaceAR(touch));
+		}
+
+		void setRegisterAsTouchable(bool pTouchable)
+		{
+			this->mIsRegisterAsTouchable = pTouchable;
 		}
 
 		virtual void onTouch(CCTouch* touch, CCEvent* event)
 		{
 		}
 
-		void setRegisterAsTouchable(bool pTouchable)
+		virtual void update(float pDeltaTime)
 		{
-			this->mIsRegisterAsTouchable = pTouchable;
+			this->setVisible(this->getParent()->isVisible());
 		}
 };
 

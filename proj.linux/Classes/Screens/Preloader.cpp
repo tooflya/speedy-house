@@ -1,3 +1,6 @@
+#ifndef CONST_PRELOADER
+#define CONST_PRELOADER
+
 #include "cocos2d.h"
 
 #include "Screens/MainMenu.cpp"
@@ -5,10 +8,10 @@
 class Preloader : public Screen
 {
 	private:
-    	int mNumberOfSprites;
-    	int mNumberOfLoadedSprites;
+		int mNumberOfSprites;
+		int mNumberOfLoadedSprites;
 
-    	CCProgressTimer* mProgressTimer;
+		CCProgressTimer* mProgressTimer;
 
 	public:
 		Preloader(void)
@@ -45,21 +48,21 @@ class Preloader : public Screen
 
 		void loadingCallBack(CCObject *obj)
 		{
-    		++mNumberOfLoadedSprites;
+			++mNumberOfLoadedSprites;
 
-    		//this->mProgressTimer->setPercentage((int)(((float)mNumberOfLoadedSprites / mNumberOfSprites) * 100));
+			//this->mProgressTimer->setPercentage((int)(((float)mNumberOfLoadedSprites / mNumberOfSprites) * 100));
 
-    		if (mNumberOfLoadedSprites == mNumberOfSprites)
-    		{
-    			if(this->checkIsTexturesLoaded())
-    			{
-    				CCDirector::sharedDirector()->replaceScene(new MainMenu());
-    			}
-    		}
-    		else
-    		{
-			    
-    		}
+			if (mNumberOfLoadedSprites == mNumberOfSprites)
+			{
+				if(this->checkIsTexturesLoaded())
+				{
+					CCDirector::sharedDirector()->replaceScene(new MainMenu());
+				}
+			}
+			else
+			{
+				
+			}
 		}
 
 		bool checkIsTexturesLoaded()
@@ -69,9 +72,11 @@ class Preloader : public Screen
 
 		virtual void update(float pDeltaTime)
 		{
-    		if(this->checkIsTexturesLoaded())
-    		{
-    			CCDirector::sharedDirector()->replaceScene(new MainMenu());
-    		}
+			if(this->checkIsTexturesLoaded())
+			{
+				CCDirector::sharedDirector()->replaceScene(new MainMenu());
+			}
 		}
 };
+
+#endif
