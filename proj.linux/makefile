@@ -5,8 +5,8 @@ CCFLAGS = -Wall
 CXXFLAGS = -Wall
 VISIBILITY = 
 
-COCOS2DX_PATH = /home/igor/git/cocos2d-x/cocos2dx
-COCOS_PATH = /home/igor/git/cocos2d-x
+COCOS2DX_PATH = /home/igor/Development/cocos2d-x/cocos2dx
+COCOS_PATH = /home/igor/Development/cocos2d-x
 
 INCLUDES =  -I../ \
 			-I../Classes \
@@ -28,7 +28,16 @@ INCLUDES =  -I../ \
 
 DEFINES = -DLINUX
 
-OBJECTS = ./main.o 
+OBJECTS = ./main.o \
+			../Classes/AppDelegate.o \
+			../Classes/Entities/Entity.o \
+			../Classes/Managers/EntityManager.o \
+			../Classes/Screens/Screen.o \
+			../Classes/Screens/PopupScreen.o \
+			../Classes/Screens/Preloader.o \
+			../Classes/Screens/MainMenu.o \
+			../Classes/Screens/Difficult.o \
+			../Classes/Utils/Utils.o \
 
 LBITS := $(shell getconf LONG_BIT)
 ifeq ($(LBITS),64)

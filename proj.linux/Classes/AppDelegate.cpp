@@ -1,26 +1,12 @@
-#include <vector>
+#ifndef CONST_APPDELEGATE
+#define CONST_APPDELEGATE
 
-#include "cocos2d.h"
+#include "AppDelegate.h"
 
-#include "Screens/Screen.cpp"
-#include "Screens/Preloader.cpp"
 
-using namespace std;
-
-typedef struct tagResource {
-	cocos2d::CCSize size;
-	char directory[100];
-} Resource;
-
-static Resource Resources480x320  	= { cocos2d::CCSizeMake(480, 320),  "480x320"   };
-static Resource Resources1024x720 	= { cocos2d::CCSizeMake(1024, 720), "1024x720"  };
-static Resource Resources2048x1536  = { cocos2d::CCSizeMake(2048, 1536),"2048x1536" };
-static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(480, 320);
-
-class AppDelegate: private cocos2d::CCApplication
-{
-	public:
-		bool applicationDidFinishLaunching()
+		AppDelegate::AppDelegate(){};
+		AppDelegate::~AppDelegate(){};
+		bool AppDelegate::applicationDidFinishLaunching()
 		{
 			CCDirector* director 	= CCDirector::sharedDirector();
 			CCEGLView*  EGLView 	= CCEGLView::sharedOpenGLView();
@@ -59,13 +45,14 @@ class AppDelegate: private cocos2d::CCApplication
 			return true;
 		}
 
-		void applicationDidEnterBackground()
+		void AppDelegate::applicationDidEnterBackground()
 		{
 			CCDirector::sharedDirector()->pause();
 		}
 
-		void applicationWillEnterForeground()
+		void AppDelegate::applicationWillEnterForeground()
 		{
 			CCDirector::sharedDirector()->resume();
 		}
-};
+
+#endif

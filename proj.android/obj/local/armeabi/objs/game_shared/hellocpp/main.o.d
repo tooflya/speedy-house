@@ -229,6 +229,8 @@ obj/local/armeabi/objs/game_shared/hellocpp/main.o: jni/hellocpp/main.cpp \
  jni/../../Classes/Screens/../Entities/Entity.cpp \
  jni/../../Classes/Screens/Preloader.cpp \
  jni/../../Classes/Screens/MainMenu.cpp \
+ jni/../../Classes/Screens/Difficult.cpp \
+ jni/../../Classes/Screens/PopupScreen.cpp \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/platform/android/jni/JniHelper.h \
  /home/igor/.android/ndk/platforms/android-14/arch-arm/usr/include/jni.h
 
@@ -691,6 +693,10 @@ jni/../../Classes/Screens/../Entities/Entity.cpp:
 jni/../../Classes/Screens/Preloader.cpp:
 
 jni/../../Classes/Screens/MainMenu.cpp:
+
+jni/../../Classes/Screens/Difficult.cpp:
+
+jni/../../Classes/Screens/PopupScreen.cpp:
 
 /home/igor/Development/speedy-house/proj.android/../../cocos2dx/platform/android/jni/JniHelper.h:
 

@@ -1,52 +1,20 @@
 #ifndef CONST_ENTITY
 #define CONST_ENTITY
 
-#include "cocos2d.h"
+#include "Entity.h"
+#include "../Managers/EntityManager.h"
+#include "../Screens/Preloader.h"
 
-#include <iostream>
-#include <functional>
-
-using namespace cocos2d;
-
-class Entity : public CCSprite, public CCTargetedTouchDelegate
-{
-	protected:
-		int mWidth;
-		int mHeight;
-
-		int mFrameWidth;
-		int mFrameHeight;
-
-		int mFramesCount;
-
-		int mHorizontalFramesCount;
-		int mVerticalFramesCount;
-
-		int mCurrentFrameIndex;
-
-		int* mFramesCoordinatesX;
-		int* mFramesCoordinatesY;
-
-		bool mWasTouched;
-		bool mIsRegisterAsTouchable;
-
-		float mAnimationScaleDownTime;
-		float mAnimationScaleUpTime;
-
-		float mAnimationScaleDownFactor;
-		float mAnimationScaleUpFactor;
-
-	public:
-		Entity(const char* pszFileName)
+		void Entity::init(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent)
 		{
 			this->initWithFile(pszFileName);
 
-			this->scheduleUpdate();
-		}
+			if(pParent)
+			{
+				pParent->addChild(this);
+			}
 
-		Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount)
-		{
-			this->initWithFile(pszFileName);
+			this->setPosition(ccp(pX, pY));
 
 			this->mWidth  = this->getTextureRect().size.width;
 			this->mHeight = this->getTextureRect().size.height;
@@ -108,12 +76,107 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 			this->scheduleUpdate();
 		}
 
-		int getCurrentFrameIndex()
+
+		Entity::Entity()
+		{
+		}
+
+		Entity::Entity(const char* pszFileName)
+		{
+			this->init(0, 0, pszFileName, 1, 1, NULL);
+		}
+
+		Entity::Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount)
+		{
+			this->init(0, 0, pszFileName, pHorizontalFramesCount, pVerticalFramesCount, NULL);
+		}
+
+		Entity::Entity(int pX, int pY, const char* pszFileName)
+		{
+			this->init(pX, pY, pszFileName, 1, 1, NULL);
+		}
+
+		Entity::Entity::Entity(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount)
+		{
+			this->init(pX, pY, pszFileName, pHorizontalFramesCount, pVerticalFramesCount, NULL);
+		}
+
+		Entity::Entity(const char* pszFileName, CCNode* pParent)
+		{
+			this->init(0, 0, pszFileName, 1, 1, pParent);
+		}
+
+		Entity::Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent)
+		{
+			this->init(0, 0, pszFileName, pHorizontalFramesCount, pVerticalFramesCount, pParent);
+		}
+
+		Entity::Entity(int pX, int pY, const char* pszFileName, CCNode* pParent)
+		{
+			this->init(pX, pY, pszFileName, 1, 1, pParent);
+		}
+
+		Entity::Entity(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent)
+		{
+			this->init(pX, pY, pszFileName, pHorizontalFramesCount, pVerticalFramesCount, pParent);
+		}
+
+		/**
+		 *
+		 * Take care about EntityManager
+		 *
+		 */
+
+		Entity* Entity::create()
+		{
+			return this;
+		}
+
+		void Entity::destroy()
+		{
+			if(this->hasEntityManager())
+			{
+				this->getEntityManager()->destroy(this->id);
+			}
+		}
+
+		void Entity::setEntityManager(EntityManager* pEntityManager)
+		{
+			this->mEntityManager = pEntityManager;
+		}
+
+		EntityManager* Entity::getEntityManager()
+		{
+			return this->mEntityManager;
+		}
+
+		bool Entity::hasEntityManager()
+		{
+			return this->mEntityManager != NULL;
+		}
+
+		void Entity::setEntityManagerId(int pId)
+		{
+			this->id = pId;
+		}
+
+		int Entity::getEntityManagerId()
+		{
+			return this->id;
+		}
+
+		/**
+		 *
+		 * Take care about animation
+		 *
+		 */
+
+		int Entity::getCurrentFrameIndex()
 		{
 			return this->mCurrentFrameIndex;
 		}
 
-		void setCurrentFrameIndex(int pIndex)
+		void Entity::setCurrentFrameIndex(int pIndex)
 		{
 			if(pIndex < this->mHorizontalFramesCount * this->mVerticalFramesCount && pIndex >= 0)
 			{
@@ -127,9 +190,9 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 			}
 		}
 
-		void nextFrameIndex()
+		void Entity::nextFrameIndex()
 		{
-			int potencialNextFrame = this->getCurrentFrameIndex() +1;
+			int potencialNextFrame = this->getCurrentFrameIndex() + 1;
 
 			this->setCurrentFrameIndex(potencialNextFrame > this->mFramesCount ? 0 : potencialNextFrame);
 		}
@@ -140,21 +203,21 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 		 *
 		 */
 
-		void onEnter()
+		void Entity::onEnter()
 		{
 			CCDirector* pDirector = CCDirector::sharedDirector();
 			pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 			CCSprite::onEnter();
 		}
 
-		void onExit()
+		void Entity::onExit()
 		{
 			CCDirector* pDirector = CCDirector::sharedDirector();
 			pDirector->getTouchDispatcher()->removeDelegate(this);
 			CCSprite::onExit();
 		}
 
-		bool ccTouchBegan(CCTouch* touch, CCEvent* event)
+		bool Entity::ccTouchBegan(CCTouch* touch, CCEvent* event)
 		{
 			if(!this->mIsRegisterAsTouchable || !this->isVisible())
 			{
@@ -173,7 +236,7 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 			return false;
 		}
 
-		void ccTouchMoved(CCTouch* touch, CCEvent* event)
+		void Entity::ccTouchMoved(CCTouch* touch, CCEvent* event)
 		{
 			if(!containsTouchLocation(touch))
 			{
@@ -189,7 +252,7 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 			}
 		}
 
-		void ccTouchEnded(CCTouch* touch, CCEvent* event)
+		void Entity::ccTouchEnded(CCTouch* touch, CCEvent* event)
 		{
 			if(this->mWasTouched)
 			{
@@ -201,24 +264,34 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 			this->mWasTouched = false;
 		}
 
-		bool containsTouchLocation(CCTouch* touch)
+		bool Entity::containsTouchLocation(CCTouch* touch)
 		{
 			return CCRectMake(-this->mFrameWidth/ 2, -this->mFrameHeight / 2, this->mFrameWidth, this->mFrameHeight).containsPoint(convertTouchToNodeSpaceAR(touch));
 		}
 
-		void setRegisterAsTouchable(bool pTouchable)
+		void Entity::setRegisterAsTouchable(bool pTouchable)
 		{
 			this->mIsRegisterAsTouchable = pTouchable;
 		}
 
-		virtual void onTouch(CCTouch* touch, CCEvent* event)
+		 void Entity::onTouch(CCTouch* touch, CCEvent* event)
 		{
 		}
 
-		virtual void update(float pDeltaTime)
+		 void Entity::update(float pDeltaTime)
 		{
 			this->setVisible(this->getParent()->isVisible());
 		}
-};
+
+		/**
+		 *
+		 * Let's take care about object copy
+		 *
+		 */
+
+		 Entity* Entity::deepCopy()
+		{
+			return this;
+		}
 
 #endif

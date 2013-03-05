@@ -1,27 +1,10 @@
 #ifndef CONST_POPUPSCREEN
 #define CONST_POPUPSCREEN
 
-#include "cocos2d.h"
+#include "PopupScreen.h"
 
-#include <list>
 
-using namespace std;
-
-class PopupScreen : public CCLayer
-{
-	protected:
-		float mAnimationTimeElapsed;
-		float mAnimationTimeToHide;
-
-		bool mAnimationNeedHide;
-
-		Entity* mBackgroundCircle;
-		Entity* mBackground;
-		
-		list<Entity>* mAnimationElements;
-
-	public:
-		PopupScreen()
+		PopupScreen::PopupScreen()
 		{
 			this->mBackgroundCircle = new Entity("circle.png");
 			this->mBackgroundCircle->setPosition(ccp(240, 160));
@@ -33,18 +16,18 @@ class PopupScreen : public CCLayer
 
 			this->mAnimationNeedHide = false;
 
-			this->mAnimationElements = new list<Entity>;
-			
+			this->mAnimationElements = new EntityManager(100, new Spiral(), this);
+			this->mAnimationElements->create()->destroy();
 			this->scheduleUpdate();
 		}
 
-		void create()
+		void PopupScreen::create()
 		{
 			this->mBackground->setScale(0);
 			this->setVisible(false);
 		}
 
-		void show()
+		void PopupScreen::show()
 		{
 			this->setVisible(true);
 
@@ -52,7 +35,7 @@ class PopupScreen : public CCLayer
 			this->mBackgroundCircle->runAction(CCScaleTo::create(this->mAnimationTimeToHide, 0));
 		}
 
-		void hide()
+		void PopupScreen::hide()
 		{
 			this->mBackground->runAction(CCScaleTo::create(this->mAnimationTimeToHide, 0));
 			this->mBackgroundCircle->runAction(CCScaleTo::create(this->mAnimationTimeToHide, 2));
@@ -60,7 +43,7 @@ class PopupScreen : public CCLayer
 			this->mAnimationNeedHide = true;
 		}
 
-		virtual void update(float pDeltaTime)
+		void PopupScreen::update(float pDeltaTime)
 		{
 			if(this->mAnimationNeedHide)
 			{
@@ -74,9 +57,11 @@ class PopupScreen : public CCLayer
 					this->mAnimationTimeElapsed = 0;
 				}
 			}
+
+			
 		}
 
-		virtual void draw()
+		void PopupScreen::draw()
 		{
 			if(this->isVisible())
 			{
@@ -123,6 +108,6 @@ class PopupScreen : public CCLayer
 				ccDrawSolidPoly(vertices4, 4, ccc4f(255.0f / 255.0f, 252.0f / 255.0f, 232.0f / 255.0f, 1));
 			}
 		}
-};
+
 
 #endif

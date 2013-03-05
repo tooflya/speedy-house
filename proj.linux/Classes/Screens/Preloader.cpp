@@ -1,20 +1,10 @@
 #ifndef CONST_PRELOADER
 #define CONST_PRELOADER
 
-#include "cocos2d.h"
+#include "Preloader.h"
 
-#include "Screens/MainMenu.cpp"
 
-class Preloader : public Screen
-{
-	private:
-		int mNumberOfSprites;
-		int mNumberOfLoadedSprites;
-
-		CCProgressTimer* mProgressTimer;
-
-	public:
-		Preloader(void)
+		Preloader::Preloader(void)
 		{
 			this->mNumberOfLoadedSprites = 0;
 			this->mNumberOfSprites = 1;
@@ -46,7 +36,7 @@ class Preloader : public Screen
 		
 		}
 
-		void loadingCallBack(CCObject *obj)
+		void Preloader::loadingCallBack(CCObject *obj)
 		{
 			++mNumberOfLoadedSprites;
 
@@ -65,18 +55,18 @@ class Preloader : public Screen
 			}
 		}
 
-		bool checkIsTexturesLoaded()
+		bool Preloader::checkIsTexturesLoaded()
 		{
 			return this->mProgressTimer->getPercentage() >= 100;
 		}
 
-		virtual void update(float pDeltaTime)
+		void Preloader::update(float pDeltaTime)
 		{
 			if(this->checkIsTexturesLoaded())
 			{
 				CCDirector::sharedDirector()->replaceScene(new MainMenu());
 			}
 		}
-};
+
 
 #endif

@@ -1,18 +1,12 @@
 #ifndef CONST_SCREEN
 #define CONST_SCREEN
 
-#include "cocos2d.h"
-#include "../Entities/Entity.cpp"
+#include "Screen.h"
 
-class Screen : public CCScene
-{
-	public:
-		Entity* mBackground;
-
-		Screen()
+		Screen::Screen()
 		{
 			this->scheduleUpdate();
 		}
-};
+
 
 #endif
