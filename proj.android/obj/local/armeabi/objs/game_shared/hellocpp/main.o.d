@@ -1,6 +1,5 @@
 obj/local/armeabi/objs/game_shared/hellocpp/main.o: jni/hellocpp/main.cpp \
- jni/../../Classes/AppDelegate.cpp \
- /home/igor/.android/ndk/sources/cxx-stl/gnu-libstdc++/include/4.6.3/vector \
+ jni/../../Classes/AppDelegate.cpp jni/../../Classes/AppDelegate.h \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/include/cocos2d.h \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/include/ccConfig.h \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/platform/CCPlatformConfig.h \
@@ -97,6 +96,7 @@ obj/local/armeabi/objs/game_shared/hellocpp/main.o: jni/hellocpp/main.cpp \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/cocoa/CCString.h \
  /home/igor/.android/ndk/sources/cxx-stl/gnu-libstdc++/include/4.6.3/functional \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/sprite_nodes/CCSpriteFrame.h \
+ /home/igor/.android/ndk/sources/cxx-stl/gnu-libstdc++/include/4.6.3/vector \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/actions/CCActionCamera.h \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/actions/CCActionInterval.h \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/actions/CCActionManager.h \
@@ -225,18 +225,28 @@ obj/local/armeabi/objs/game_shared/hellocpp/main.o: jni/hellocpp/main.cpp \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/touch_dispatcher/CCTouchDispatcher.h \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/CCScheduler.h \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/support/data_support/uthash.h \
- jni/../../Classes/Screens/Screen.cpp \
- jni/../../Classes/Screens/../Entities/Entity.cpp \
- jni/../../Classes/Screens/Preloader.cpp \
+ jni/../../Classes/Screens/Screen.h jni/../../Classes/Entities/Entity.h \
+ jni/../../Classes/Screens/Preloader.h jni/../../Classes/Screens/Screen.h \
+ jni/../../Classes/Screens/MainMenu.h \
+ jni/../../Classes/Screens/Difficult.h \
+ jni/../../Classes/Screens/PopupScreen.h \
+ jni/../../Classes/Managers/EntityManager.h \
+ jni/../../Classes/Utils/Utils.h jni/../../Classes/Screens/Preloader.cpp \
+ jni/../../Classes/Screens/Preloader.h \
  jni/../../Classes/Screens/MainMenu.cpp \
- jni/../../Classes/Screens/Difficult.cpp \
+ jni/../../Classes/Entities/Entity.cpp \
+ jni/../../Classes/Entities/Entity.h jni/../../Classes/Screens/Screen.cpp \
  jni/../../Classes/Screens/PopupScreen.cpp \
+ jni/../../Classes/Screens/Difficult.cpp \
+ jni/../../Classes/Utils/Utils.cpp jni/../../Classes/Utils/Utils.h \
+ jni/../../Classes/Managers/EntityManager.cpp \
+ jni/../../Classes/Managers/EntityManager.h \
  /home/igor/Development/speedy-house/proj.android/../../cocos2dx/platform/android/jni/JniHelper.h \
  /home/igor/.android/ndk/platforms/android-14/arch-arm/usr/include/jni.h
 
 jni/../../Classes/AppDelegate.cpp:
 
-/home/igor/.android/ndk/sources/cxx-stl/gnu-libstdc++/include/4.6.3/vector:
+jni/../../Classes/AppDelegate.h:
 
 /home/igor/Development/speedy-house/proj.android/../../cocos2dx/include/cocos2d.h:
 
@@ -429,6 +439,8 @@ jni/../../Classes/AppDelegate.cpp:
 /home/igor/.android/ndk/sources/cxx-stl/gnu-libstdc++/include/4.6.3/functional:
 
 /home/igor/Development/speedy-house/proj.android/../../cocos2dx/sprite_nodes/CCSpriteFrame.h:
+
+/home/igor/.android/ndk/sources/cxx-stl/gnu-libstdc++/include/4.6.3/vector:
 
 /home/igor/Development/speedy-house/proj.android/../../cocos2dx/actions/CCActionCamera.h:
 
@@ -686,17 +698,47 @@ jni/../../Classes/AppDelegate.cpp:
 
 /home/igor/Development/speedy-house/proj.android/../../cocos2dx/support/data_support/uthash.h:
 
-jni/../../Classes/Screens/Screen.cpp:
+jni/../../Classes/Screens/Screen.h:
 
-jni/../../Classes/Screens/../Entities/Entity.cpp:
+jni/../../Classes/Entities/Entity.h:
+
+jni/../../Classes/Screens/Preloader.h:
+
+jni/../../Classes/Screens/Screen.h:
+
+jni/../../Classes/Screens/MainMenu.h:
+
+jni/../../Classes/Screens/Difficult.h:
+
+jni/../../Classes/Screens/PopupScreen.h:
+
+jni/../../Classes/Managers/EntityManager.h:
+
+jni/../../Classes/Utils/Utils.h:
 
 jni/../../Classes/Screens/Preloader.cpp:
 
+jni/../../Classes/Screens/Preloader.h:
+
 jni/../../Classes/Screens/MainMenu.cpp:
+
+jni/../../Classes/Entities/Entity.cpp:
+
+jni/../../Classes/Entities/Entity.h:
+
+jni/../../Classes/Screens/Screen.cpp:
+
+jni/../../Classes/Screens/PopupScreen.cpp:
 
 jni/../../Classes/Screens/Difficult.cpp:
 
-jni/../../Classes/Screens/PopupScreen.cpp:
+jni/../../Classes/Utils/Utils.cpp:
+
+jni/../../Classes/Utils/Utils.h:
+
+jni/../../Classes/Managers/EntityManager.cpp:
+
+jni/../../Classes/Managers/EntityManager.h:
 
 /home/igor/Development/speedy-house/proj.android/../../cocos2dx/platform/android/jni/JniHelper.h:
 

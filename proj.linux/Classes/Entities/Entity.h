@@ -61,6 +61,7 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 		Entity* create();
 
 		void destroy();
+		void destroy(bool pManage);
 
 		void setEntityManager(EntityManager* pEntityManager);
 

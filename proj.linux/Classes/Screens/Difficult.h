@@ -19,8 +19,11 @@ class Difficult : public PopupScreen
 
 			bool mIsAnimationReverse;
 
+			CCNode* mParent;
+			CCNode* mParentClass;
+
 		public:
-			ChoiseButton(int pX, int pY, const char* pszFileName, CCNode* pParent) :
+			ChoiseButton(int pX, int pY, const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
 				Entity(pX, pY, pszFileName, pParent)
 				{
 					this->setRegisterAsTouchable(true);
@@ -31,6 +34,9 @@ class Difficult : public PopupScreen
 					this->mAnimationTime = Utils::random(1.4, 3.5);
 
 					this->mAnimationPosition = 0;
+
+					this->mParent = pParent;
+					this->mParentClass = pParentClass;
 				};
 
 			virtual void update(float pDeltaTime)
@@ -65,8 +71,8 @@ class Difficult : public PopupScreen
 	class EasyButton : public ChoiseButton
 	{
 		public:
-			EasyButton(int pX, int pY, const char* pszFileName, CCNode* pParent) :
-				ChoiseButton(pX, pY, pszFileName, pParent)
+			EasyButton(int pX, int pY, const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
+				ChoiseButton(pX, pY, pszFileName, pParent, pParentClass)
 				{
 				};
 
@@ -78,8 +84,8 @@ class Difficult : public PopupScreen
 	class NormalButton : public ChoiseButton
 	{
 		public:
-			NormalButton(int pX, int pY, const char* pszFileName, CCNode* pParent) :
-				ChoiseButton(pX, pY, pszFileName, pParent)
+			NormalButton(int pX, int pY, const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
+				ChoiseButton(pX, pY, pszFileName, pParent, pParentClass)
 				{
 				};
 
@@ -91,8 +97,8 @@ class Difficult : public PopupScreen
 	class HardButton : public ChoiseButton
 	{
 		public:
-			HardButton(int pX, int pY, const char* pszFileName, CCNode* pParent) :
-				ChoiseButton(pX, pY, pszFileName, pParent)
+			HardButton(int pX, int pY, const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
+				ChoiseButton(pX, pY, pszFileName, pParent, pParentClass)
 				{
 				};
 

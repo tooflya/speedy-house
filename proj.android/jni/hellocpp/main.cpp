@@ -1,4 +1,12 @@
 #include "AppDelegate.cpp"
+#include "Preloader.cpp"
+#include "MainMenu.cpp"
+#include "Entity.cpp"
+#include "Screen.cpp"
+#include "PopupScreen.cpp"
+#include "Difficult.cpp"
+#include "Utils.cpp"
+#include "EntityManager.cpp"
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>

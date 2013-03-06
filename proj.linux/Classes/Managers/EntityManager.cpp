@@ -19,6 +19,10 @@ void EntityManager::init(int pCreateCount, int pMaxCount, Entity* pEntity, CCNod
 		currentEntity->setEntityManagerId(i);
 
 		this->addObject(currentEntity);
+
+		this->mParent->addChild(currentEntity);
+		
+		currentEntity->destroy(false);
 	}
 }
 
@@ -34,13 +38,10 @@ EntityManager::EntityManager(int pCreateCount, int pMaxCount, Entity* pEntity, C
 
 Entity* EntityManager::create()
 {
-	if (this->mLastElementNumber + 1 < this->mCapacity) {
-		this->mLastElementNumber++;
-
+	if (++this->mLastElementNumber < this->mCapacity)
+	{
 		Entity* object = (Entity*) this->objectAtIndex(this->mLastElementNumber);
 		object->create();
-
-		this->mParent->addChild(object);
 
 		return object;
 	}
@@ -50,7 +51,30 @@ Entity* EntityManager::create()
 
 void EntityManager::destroy(int pIndex)
 {
-	this->mParent->removeChild((Entity*) this->objectAtIndex(pIndex));
+	if(pIndex > 0 && pIndex < this->mCapacity && this->mLastElementNumber >= 0)
+	{
+		this->exchangeObjectAtIndex(pIndex, this->mLastElementNumber);
+
+		((Entity*) this->objectAtIndex(pIndex))->setEntityManagerId(pIndex);
+		((Entity*) this->objectAtIndex(this->mLastElementNumber))->setEntityManagerId(this->mLastElementNumber);
+
+		//((Entity*) this->objectAtIndex(pIndex))->destroy(false);
+
+		this->mLastElementNumber--;
+	}
+}
+
+int EntityManager::getCount()
+{
+	return this->mLastElementNumber + 1;
+}
+
+void EntityManager::clear()
+{
+	for(int i = 0; i < this->getCount(); i++)
+	{
+		((Entity*) this->objectAtIndex(i))->destroy();
+	}
 }
 
 #endif

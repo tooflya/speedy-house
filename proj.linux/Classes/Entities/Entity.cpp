@@ -129,15 +129,27 @@ Entity::Entity(int pX, int pY, const char* pszFileName, int pHorizontalFramesCou
 
 Entity* Entity::create()
 {
+	this->setVisible(true);
+
 	return this;
+}
+
+void Entity::destroy(bool pManage)
+{
+	this->setVisible(false);
+
+	if(pManage)
+	{
+		if(this->hasEntityManager())
+		{
+			this->getEntityManager()->destroy(this->id);
+		}
+	}
 }
 
 void Entity::destroy()
 {
-	if(this->hasEntityManager())
-	{
-		this->getEntityManager()->destroy(this->id);
-	}
+	this->destroy(true);
 }
 
 void Entity::setEntityManager(EntityManager* pEntityManager)
@@ -219,7 +231,7 @@ void Entity::onExit()
 
 bool Entity::ccTouchBegan(CCTouch* touch, CCEvent* event)
 		{
-	if(!this->mIsRegisterAsTouchable || !this->isVisible())
+	if(!this->mIsRegisterAsTouchable || !this->isVisible() || !this->getParent()->isVisible())
 	{
 		return false;
 	}
@@ -280,7 +292,6 @@ void Entity::onTouch(CCTouch* touch, CCEvent* event)
 
 void Entity::update(float pDeltaTime)
 {
-	this->setVisible(this->getParent()->isVisible());
 }
 
 /**

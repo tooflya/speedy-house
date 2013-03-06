@@ -14,12 +14,19 @@ class PopupScreen : public CCLayer
 	class Spiral : public Entity
 	{
 		protected:
-			int mAnimationPositionX1;
-			int mAnimationPositionX2;
+			float mAnimationScaleTime;
 
-			float mAnimationPositionTime;
+			float mAnimationLifeTime;
+			float mAnimationLifeTimeElaped;
 
-			bool mIsMoved;
+			float mAnimationHideX;
+			float mAnimationHideY;
+			float mAnimationHideSpeed;
+
+			float mAnimationRotationSpeed;
+
+			bool isAnimationLifeTimeElapsed;
+			bool isAnimationHide;
 
 		public:
 			Spiral() :
@@ -30,29 +37,86 @@ class PopupScreen : public CCLayer
 			Spiral(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount) :
 				Entity(pszFileName, pHorizontalFramesCount, pVerticalFramesCount)
 				{
-					this->setPosition(ccp(Utils::random(0, 480), Utils::random(0, 320)));
-					this->setCurrentFrameIndex(Utils::random(0, 4));
-
-					//this->setVisible(false);
-					//this->setScale(0);
 				};
 
 			void show()
 			{
+				this->setPosition(ccp(Utils::random(0, 480), Utils::random(0, 320)));
+				this->setCurrentFrameIndex(Utils::random(0, 4));
 
+				this->mAnimationRotationSpeed = Utils::random(-2.0, 2.0);
+				this->mAnimationScaleTime = Utils::random(3.0, 8.0);
+				this->mAnimationLifeTime = this->mAnimationScaleTime + Utils::random(0.5, 6.0);
+				this->mAnimationLifeTimeElaped = 0;
+				this->mAnimationHideSpeed = 15;
+
+				this->isAnimationLifeTimeElapsed = false;
+				this->isAnimationHide = false;
+
+				this->setScale(0);
+
+				this->runAction(CCScaleTo::create(this->mAnimationScaleTime, 1));
+			}
+
+			void hide()
+			{
+				this->isAnimationHide = true;
+
+				this->mAnimationHideX = this->getPosition().x > 240 ? this->mAnimationHideSpeed : -this->mAnimationHideSpeed;
+				this->mAnimationHideY = this->getPosition().y > 160 ? this->mAnimationHideSpeed : -this->mAnimationHideSpeed;
 			}
 
 			virtual Entity* deepCopy()
 			{
 				return new Spiral("popup-sprite-5.png", 4, 1);
 			}
+
+			virtual void update(float pDeltaTime)
+			{
+				if(this->isVisible())
+				{
+					this->setRotation(this->getRotation() + this->mAnimationRotationSpeed);
+
+					this->mAnimationLifeTimeElaped += pDeltaTime;
+
+					if(this->mAnimationLifeTimeElaped >= this->mAnimationLifeTime && !this->isAnimationLifeTimeElapsed)
+					{
+						this->isAnimationLifeTimeElapsed = true;
+
+						this->runAction(CCScaleTo::create(this->mAnimationScaleTime, 0));
+					}
+
+					if(this->isAnimationLifeTimeElapsed)
+					{
+						if(this->getScale() <= 0)
+						{
+							this->destroy();
+						}
+					}
+
+					if(this->isAnimationHide)
+					{
+						this->setPosition(ccp(this->getPosition().x + this->mAnimationHideX, this->getPosition().y + this->mAnimationHideY));
+
+						if(this->getPosition().x < 0 || this->getPosition().x > 480 || this->getPosition().y < 0 || this->getPosition().y > 320)
+						{
+							this->destroy();
+						}
+					}
+				}
+			}
 	};
 		
 	protected:
 		float mAnimationTimeElapsed;
 		float mAnimationTimeToHide;
+		bool mAnimationNeedShow;
+			
+		float mElementsCreateTime;
+		float mElementsCreateTimeElapsed;
 
 		bool mAnimationNeedHide;
+		bool mIsAttached;
 
 		Entity* mBackgroundCircle;
 		Entity* mBackground;
@@ -69,8 +133,16 @@ class PopupScreen : public CCLayer
 		void show();
 		void hide();
 
+		void onShowStarted();
+		void onShowFinished();
+
+		void onCloseStarted();
+		void onCloseFinished();
+
 		virtual void update(float pDeltaTime);
 		virtual void draw();
+
+		EntityManager* getPopupScreenElements();
 };
 
 #endif

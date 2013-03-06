@@ -10,16 +10,20 @@ void PopupScreen::init(CCNode* pParent)
 		pParent->addChild(this);
 	}
 
+	this->mIsAttached = false;
+
 	this->mBackgroundCircle = new Entity(240, 160, "circle.png", this);
 	this->mBackgroundCircle->setScale(2);
 
 	this->mAnimationTimeElapsed = 0;
 	this->mAnimationTimeToHide = 0.3;
 
+	this->mElementsCreateTime = 0.2;
+	this->mElementsCreateTimeElapsed = 0;
+
 	this->mAnimationNeedHide = false;
 
 	this->mAnimationElements = new EntityManager(100, new Spiral(), this);
-	this->mAnimationElements->create();
 	
 	this->scheduleUpdate();
 }
@@ -46,6 +50,10 @@ void PopupScreen::show()
 
 	this->mBackground->runAction(CCScaleTo::create(this->mAnimationTimeToHide, 1.0));
 	this->mBackgroundCircle->runAction(CCScaleTo::create(this->mAnimationTimeToHide, 0));
+
+	this->mAnimationNeedShow = true;
+
+	this->onShowStarted();
 }
 
 void PopupScreen::hide()
@@ -54,10 +62,55 @@ void PopupScreen::hide()
 	this->mBackgroundCircle->runAction(CCScaleTo::create(this->mAnimationTimeToHide, 2));
 
 	this->mAnimationNeedHide = true;
+
+	this->onCloseStarted();
+}
+
+EntityManager* PopupScreen::getPopupScreenElements()
+{
+	return this->mAnimationElements;
+}
+
+void PopupScreen::onShowStarted()
+{
+
+}
+
+void PopupScreen::onShowFinished()
+{
+	this->mIsAttached = true;
+}
+
+void PopupScreen::onCloseStarted()
+{
+	for(int i = 0; i < this->mAnimationElements->getCount(); i++)
+	{
+		((Spiral*) this->mAnimationElements->objectAtIndex(i))->hide();
+	}
+}
+
+void PopupScreen::onCloseFinished()
+{
+	this->mIsAttached = false;
+
+	this->mAnimationElements->clear();
 }
 
 void PopupScreen::update(float pDeltaTime)
 {
+	if(this->mAnimationNeedShow)
+	{
+		this->mAnimationTimeElapsed += pDeltaTime;
+
+		if(this->mAnimationTimeElapsed >= this->mAnimationTimeToHide)
+		{
+			this->mAnimationNeedShow = false;
+			this->mAnimationTimeElapsed = 0;
+
+			this->onShowFinished();
+		}
+	}
+
 	if(this->mAnimationNeedHide)
 	{
 		this->mAnimationTimeElapsed += pDeltaTime;
@@ -68,8 +121,25 @@ void PopupScreen::update(float pDeltaTime)
 
 			this->mAnimationNeedHide = false;
 			this->mAnimationTimeElapsed = 0;
+
+			this->onCloseFinished();
 		}
-	}	
+	}
+
+	if(this->mIsAttached)
+	{
+		this->mElementsCreateTimeElapsed += pDeltaTime;
+
+		if(this->mElementsCreateTimeElapsed >= this->mElementsCreateTime)
+		{
+			this->mElementsCreateTimeElapsed = 0;
+
+			if(this->mAnimationElements->getCount() < 100)
+			{
+				((Spiral*) this->mAnimationElements->create())->show();
+			}
+		}
+	}
 }
 
 void PopupScreen::draw()

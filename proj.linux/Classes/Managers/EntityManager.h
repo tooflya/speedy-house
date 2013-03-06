@@ -23,8 +23,11 @@ class EntityManager : public CCArray
 		EntityManager(int pCreateCount, int pMaxCount, Entity* pEntity, CCNode* pScreen);
 
 		Entity* create();
-
 		void destroy(int pIndex);
+
+		int getCount();
+
+		void clear();
 };
 
 #endif
