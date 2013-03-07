@@ -2,19 +2,20 @@
 #define CONST_ENTITY
 
 #include "Entity.h"
+#include "AppDelegate.h"
 #include "EntityManager.h"
 #include "Preloader.h"
 
-void Entity::init(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent)
+void Entity::init(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent)
 {
+	CCSize screenSize = CCEGLView::sharedOpenGLView()->getFrameSize();
+
 	this->initWithFile(pszFileName);
 
 	if(pParent)
 	{
 		pParent->addChild(this);
 	}
-
-	this->setPosition(ccp(pX, pY));
 
 	this->mWidth  = this->getTextureRect().size.width;
 	this->mHeight = this->getTextureRect().size.height;
@@ -83,42 +84,38 @@ Entity::Entity()
 
 Entity::Entity(const char* pszFileName)
 {
-	this->init(0, 0, pszFileName, 1, 1, NULL);
+	this->init(pszFileName, 1, 1, NULL);
 }
 
 Entity::Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount)
 {
-	this->init(0, 0, pszFileName, pHorizontalFramesCount, pVerticalFramesCount, NULL);
-}
-
-Entity::Entity(int pX, int pY, const char* pszFileName)
-{
-	this->init(pX, pY, pszFileName, 1, 1, NULL);
-}
-
-Entity::Entity::Entity(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount)
-{
-	this->init(pX, pY, pszFileName, pHorizontalFramesCount, pVerticalFramesCount, NULL);
+	this->init(pszFileName, pHorizontalFramesCount, pVerticalFramesCount, NULL);
 }
 
 Entity::Entity(const char* pszFileName, CCNode* pParent)
 {
-	this->init(0, 0, pszFileName, 1, 1, pParent);
+	this->init(pszFileName, 1, 1, pParent);
 }
 
 Entity::Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent)
 {
-	this->init(0, 0, pszFileName, pHorizontalFramesCount, pVerticalFramesCount, pParent);
+	this->init(pszFileName, pHorizontalFramesCount, pVerticalFramesCount, pParent);
+}
+		
+/**
+ *
+ * Take care about careful position
+ *
+ */
+
+void Entity::setPosition(const CCPoint& pPosition)
+{
+    CCSprite::setPosition(ccp(pPosition.x + this->mWidth / 2, pPosition.y - this->mHeight / 2));
 }
 
-Entity::Entity(int pX, int pY, const char* pszFileName, CCNode* pParent)
+void Entity::setCenterPosition(int pX, int pY)
 {
-	this->init(pX, pY, pszFileName, 1, 1, pParent);
-}
-
-Entity::Entity(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent)
-{
-	this->init(pX, pY, pszFileName, pHorizontalFramesCount, pVerticalFramesCount, pParent);
+    CCSprite::setPosition(ccp(pX, pY));
 }
 
 /**
@@ -207,6 +204,38 @@ void Entity::nextFrameIndex()
 	int potencialNextFrame = this->getCurrentFrameIndex() + 1;
 
 	this->setCurrentFrameIndex(potencialNextFrame > this->mFramesCount ? 0 : potencialNextFrame);
+}
+
+void Entity::changeTexture(Texture* pTexture)
+{
+	CCRect textureRectanle = CCRect(0, 0, pTexture->getTexture()->getContentSize().width, pTexture->getTexture()->getContentSize().height);
+
+	this->setTexture(pTexture->getTexture());
+	this->setTextureRect(textureRectanle);
+
+	this->mWidth  = this->getTextureRect().size.width;
+	this->mHeight = this->getTextureRect().size.height;
+
+	this->mFrameWidth = this->mWidth / pTexture->mHorizontalFramesCount;
+	this->mFrameHeight = this->mHeight / pTexture->mVerticalFramesCount; 
+
+	this->mFramesCount = pTexture->mHorizontalFramesCount * pTexture->mVerticalFramesCount;
+
+	this->mHorizontalFramesCount = pTexture->mHorizontalFramesCount;
+	this->mVerticalFramesCount   = pTexture->mVerticalFramesCount;
+
+	int counter = 0;
+
+	for(int i = 0; i < this->mVerticalFramesCount; i++)
+	{
+		for(int j = 0; j < this->mHorizontalFramesCount; j++, counter++)
+		{
+			this->mFramesCoordinatesX[counter] = j * (this->mWidth / this->mHorizontalFramesCount);
+			this->mFramesCoordinatesY[counter] = i * (this->mHeight / this->mVerticalFramesCount);
+		}
+	}
+
+	this->setCurrentFrameIndex(0);
 }
 
 /**

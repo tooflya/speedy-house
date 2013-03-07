@@ -5,6 +5,7 @@
 
 #include "Entity.h"
 #include "EntityManager.h"
+#include "Texture.h"
 #include "Utils.h"
 
 using namespace cocos2d;
@@ -34,6 +35,11 @@ class PopupScreen : public CCLayer
 				{
 				};
 
+			Spiral(const char* pszFileName) :
+				Entity(pszFileName)
+				{
+				};
+
 			Spiral(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount) :
 				Entity(pszFileName, pHorizontalFramesCount, pVerticalFramesCount)
 				{
@@ -41,12 +47,12 @@ class PopupScreen : public CCLayer
 
 			void show()
 			{
-				this->setPosition(ccp(Utils::random(0, 480), Utils::random(0, 320)));
-				this->setCurrentFrameIndex(Utils::random(0, 4));
+				this->setPosition(ccp(Utils::randomf(0, 480), Utils::randomf(0, 320)));
+				this->setCurrentFrameIndex(Utils::randomf(0, 4));
 
-				this->mAnimationRotationSpeed = Utils::random(-2.0, 2.0);
-				this->mAnimationScaleTime = Utils::random(3.0, 8.0);
-				this->mAnimationLifeTime = this->mAnimationScaleTime + Utils::random(0.5, 6.0);
+				this->mAnimationRotationSpeed = Utils::randomf(-2.0, 2.0);
+				this->mAnimationScaleTime = Utils::randomf(1.0, 8.0);
+				this->mAnimationLifeTime = this->mAnimationScaleTime + Utils::randomf(0.5, 6.0);
 				this->mAnimationLifeTimeElaped = 0;
 				this->mAnimationHideSpeed = 15;
 
@@ -68,7 +74,7 @@ class PopupScreen : public CCLayer
 
 			virtual Entity* deepCopy()
 			{
-				return new Spiral("popup-sprite-5.png", 4, 1);
+				return new Spiral("blank.png");
 			}
 
 			virtual void update(float pDeltaTime)
@@ -122,6 +128,14 @@ class PopupScreen : public CCLayer
 		Entity* mBackground;
 		
 		EntityManager* mAnimationElements;
+
+		Texture* mAnimationElementsTexture1;
+		Texture* mAnimationElementsTexture2;
+		Texture* mAnimationElementsTexture3;
+		Texture* mAnimationElementsTexture4;
+		Texture* mAnimationElementsTexture5;
+		Texture* mAnimationElementsTexture6;
+		Texture* mAnimationElementsTexture7;
 
 	public:
 		PopupScreen();

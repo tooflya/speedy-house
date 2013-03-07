@@ -10,7 +10,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 	CCSize 	screenSize 		= EGLView->getFrameSize();
 
 	director->setOpenGLView(EGLView);
-	EGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionNoBorder);
+	//EGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionNoBorder);
+	director->setContentScaleFactor(380.0/320.0);
 
 	vector <string> searchPath;
 
@@ -27,18 +28,30 @@ bool AppDelegate::applicationDidFinishLaunching()
 	else
 	{
 		searchPath.push_back(Resources480x320.directory);
-		director->setContentScaleFactor(Resources480x320.size.height / designResolutionSize.height);
+		//director->setContentScaleFactor(MIN(Resources480x320.size.height / designResolutionSize.height, Resources480x320.size.width / designResolutionSize.width));
 	}
 
 	CCFileUtils::sharedFileUtils()->setSearchPaths(searchPath);
 
-	director->setDisplayStats(true);
+	Options::SCREEN_WIDTH  = designResolutionSize.width;
+	Options::SCREEN_HEIGHT = designResolutionSize.height;
+
+	Options::SCREEN_CENTER_X = designResolutionSize.width / 2;
+	Options::SCREEN_CENTER_Y = designResolutionSize.height / 2;
+
+	Options::CAMERA_WIDTH  = screenSize.width;
+	Options::CAMERA_HEIGHT = screenSize.height;
+
+	Options::CAMERA_CENTER_X  = screenSize.width / 2;
+	Options::CAMERA_CENTER_Y = screenSize.height / 2;
+
+	director->setDisplayStats(false);
 	director->setAnimationInterval(1.0 / 60);
 
 	Screen* pScene = new Preloader();
 
 	director->runWithScene(pScene);
-
+	
 	return true;
 }
 

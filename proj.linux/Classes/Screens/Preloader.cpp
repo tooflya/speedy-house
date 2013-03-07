@@ -8,22 +8,28 @@ Preloader::Preloader(void)
 	this->mNumberOfLoadedSprites = 0;
 	this->mNumberOfSprites = 1;
 
-	this->mBackground = new Entity(240, 160, "start-preloader-bg.png", this);
+	Entity* mBackground = new Entity("start-preloader-bg.png", this);
 
-	Entity* progressBackgroundLayer1 = new Entity(240, 40, "start-preloader-down.png", this->mBackground);
-	Entity* progressBackgroundLayer3 = new Entity("start-preloader-fill.png");
+	Entity* progressBackgroundLayer1 = new Entity("start-preloader-down.png");
+	Entity* progressBackgroundLayer2 = new Entity("start-preloader-fill.png");
+	Entity* progressBackgroundLayer3 = new Entity("start-preloader-up.png");
 
-	this->mProgressTimer = CCProgressTimer::create(progressBackgroundLayer3);
+	this->mProgressTimer = CCProgressTimer::create(progressBackgroundLayer2);
 	this->mProgressTimer->setType(kCCProgressTimerTypeBar);
 	this->mProgressTimer->setMidpoint(ccp(0, 0));
 	this->mProgressTimer->setBarChangeRate(ccp(1, 0));
-	this->mProgressTimer->setPosition(ccp(240, 160 - 125));
 	this->mProgressTimer->setPercentage(0);
 
-	this->mBackground->addChild(this->mProgressTimer);
-	Entity* progressBackgroundLayer2 = new Entity(240, 35, "start-preloader-up.png", this->mBackground);
+	this->addChild(progressBackgroundLayer1);
+	this->addChild(this->mProgressTimer);
+	this->addChild(progressBackgroundLayer3);
 
-	this->mProgressTimer->runAction(CCProgressTo::create(0.5, 100));
+	this->mProgressTimer->runAction(CCProgressTo::create(3.5, 100));
+
+	mBackground->setCenterPosition(Options::CAMERA_CENTER_X, Options::CAMERA_CENTER_Y);
+	progressBackgroundLayer1->setCenterPosition(Options::CAMERA_CENTER_X, Utils::coord(44));
+	progressBackgroundLayer3->setCenterPosition(Options::CAMERA_CENTER_X, Utils::coord(40));
+	this->mProgressTimer->setPosition(ccp(Options::CAMERA_CENTER_X + Utils::coord(5), Utils::coord(40)));
 
 	CCTextureCache::sharedTextureCache()->addImageAsync("start-preloader-bg.png", this, callfuncO_selector(Preloader::loadingCallBack));	
 }

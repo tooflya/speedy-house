@@ -23,15 +23,15 @@ class Difficult : public PopupScreen
 			CCNode* mParentClass;
 
 		public:
-			ChoiseButton(int pX, int pY, const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
-				Entity(pX, pY, pszFileName, pParent)
+			ChoiseButton(const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
+				Entity(pszFileName, pParent)
 				{
 					this->setRegisterAsTouchable(true);
 
 					this->mIsAnimationReverse = false;
 
 					this->mAnimationElapsedTime = 1000;
-					this->mAnimationTime = Utils::random(1.4, 3.5);
+					this->mAnimationTime = Utils::randomf(1.4, 3.5);
 
 					this->mAnimationPosition = 0;
 
@@ -71,8 +71,8 @@ class Difficult : public PopupScreen
 	class EasyButton : public ChoiseButton
 	{
 		public:
-			EasyButton(int pX, int pY, const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
-				ChoiseButton(pX, pY, pszFileName, pParent, pParentClass)
+			EasyButton(const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
+				ChoiseButton(pszFileName, pParent, pParentClass)
 				{
 				};
 
@@ -84,8 +84,8 @@ class Difficult : public PopupScreen
 	class NormalButton : public ChoiseButton
 	{
 		public:
-			NormalButton(int pX, int pY, const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
-				ChoiseButton(pX, pY, pszFileName, pParent, pParentClass)
+			NormalButton(const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
+				ChoiseButton(pszFileName, pParent, pParentClass)
 				{
 				};
 
@@ -97,8 +97,8 @@ class Difficult : public PopupScreen
 	class HardButton : public ChoiseButton
 	{
 		public:
-			HardButton(int pX, int pY, const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
-				ChoiseButton(pX, pY, pszFileName, pParent, pParentClass)
+			HardButton(const char* pszFileName, CCNode* pParent, CCNode* pParentClass) :
+				ChoiseButton(pszFileName, pParent, pParentClass)
 				{
 				};
 
@@ -113,8 +113,8 @@ class Difficult : public PopupScreen
 			Difficult* mParentClass;
 
 		public:
-			BackButton(int pX, int pY, const char* pszFileName, CCNode* pParent, Difficult* pParentClass) :
-				Entity(pX, pY, pszFileName, pParent)
+			BackButton(const char* pszFileName, CCNode* pParent, Difficult* pParentClass) :
+				Entity(pszFileName, pParent)
 				{
 					this->mParentClass = pParentClass;
 

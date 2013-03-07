@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+#include "Texture.h"
+
 using namespace cocos2d;
 
 class EntityManager;
@@ -39,18 +41,23 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 		EntityManager* mEntityManager;
 
 	private:
-		void init(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent);
+		void init(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent);
 
 	public:
 		Entity();
 		Entity(const char* pszFileName);
 		Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount);
-		Entity(int pX, int pY, const char* pszFileName);
-		Entity(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount);
 		Entity(const char* pszFileName, CCNode* pParent);
 		Entity(const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent);
-		Entity(int pX, int pY, const char* pszFileName, CCNode* pParent);
-		Entity(int pX, int pY, const char* pszFileName, int pHorizontalFramesCount, int pVerticalFramesCount, CCNode* pParent);
+		
+		/**
+		 *
+		 * Take care about careful position
+		 *
+		 */
+
+		virtual void setPosition(const CCPoint& pPosition);
+		void setCenterPosition(int pX, int pY);
 
 		/**
 		 *
@@ -84,6 +91,8 @@ class Entity : public CCSprite, public CCTargetedTouchDelegate
 		void setCurrentFrameIndex(int pIndex);
 
 		void nextFrameIndex();
+
+		void changeTexture(Texture* pTexture);
 
 		/**
 		 *

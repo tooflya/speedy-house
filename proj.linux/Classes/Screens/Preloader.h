@@ -5,6 +5,7 @@
 
 #include "Screen.h"
 #include "MainMenu.h"
+#include "Options.h"
 
 using namespace cocos2d;
 

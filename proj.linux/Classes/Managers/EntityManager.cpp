@@ -58,15 +58,26 @@ void EntityManager::destroy(int pIndex)
 		((Entity*) this->objectAtIndex(pIndex))->setEntityManagerId(pIndex);
 		((Entity*) this->objectAtIndex(this->mLastElementNumber))->setEntityManagerId(this->mLastElementNumber);
 
-		//((Entity*) this->objectAtIndex(pIndex))->destroy(false);
-
 		this->mLastElementNumber--;
+	}
+}
+
+void EntityManager::changeTexture(Texture* pTexture)
+{
+	for(int i = 0; i < this->getCapacity(); i++)
+	{
+		((Entity*) this->objectAtIndex(i))->changeTexture(pTexture);
 	}
 }
 
 int EntityManager::getCount()
 {
 	return this->mLastElementNumber + 1;
+}
+
+int EntityManager::getCapacity()
+{
+	return this->mCapacity;
 }
 
 void EntityManager::clear()

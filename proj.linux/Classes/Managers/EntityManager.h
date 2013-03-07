@@ -25,7 +25,10 @@ class EntityManager : public CCArray
 		Entity* create();
 		void destroy(int pIndex);
 
+		void changeTexture(Texture* pTexture);
+
 		int getCount();
+		int getCapacity();
 
 		void clear();
 };

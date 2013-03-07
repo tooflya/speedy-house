@@ -10,8 +10,6 @@ using namespace cocos2d;
 class Screen : public CCScene
 {
 	public:
-		Entity* mBackground;
-
 		Screen();
 };
 

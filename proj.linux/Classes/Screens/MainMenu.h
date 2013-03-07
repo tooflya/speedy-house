@@ -5,6 +5,7 @@
 
 #include "Screen.h"
 #include "Difficult.h"
+#include "Options.h"
 
 using namespace cocos2d;
 
@@ -164,8 +165,8 @@ class MainMenu : public Screen
 
 			MainMenu* mParentClass;
 		public:
-			SettingsButton(int pX, int pY, const char* pszFileName, MainMenu* pParentClass, CCNode* pParent) :
-				Entity(pX, pY, pszFileName, 1, 1, pParent)
+			SettingsButton(const char* pszFileName, MainMenu* pParentClass, CCNode* pParent) :
+				Entity(pszFileName, 1, 1, pParent)
 				{
 					this->mParentClass = pParentClass;
 
@@ -208,8 +209,8 @@ class MainMenu : public Screen
 			MainMenu* mParentClass;
 
 		public:
-			PlayButton(int pX, int pY, const char* pszFileName, MainMenu* pParentClass, CCNode* pParent) :
-				Entity(pX, pY, pszFileName, pParent)
+			PlayButton(const char* pszFileName, MainMenu* pParentClass) :
+				Entity(pszFileName)
 				{
 					this->mParentClass = pParentClass;
 
@@ -224,19 +225,23 @@ class MainMenu : public Screen
 
 
 	public:
+		Entity* mBackground1;
 		Entity* mBackground2;
 		Entity* mSocialButtonsBackground;
 
+		Entity* mPlayButtonBackground;
 		PlayButton* mPlayButton;
 		Entity* mShopButton;
 		Entity* mAchievementsButton;
 		SettingsButton* mSettingsButton;
+		Entity* mSettingsButtonBackground;
 		Entity* mMoreGamesButton;
 		Entity* mTwitterButton;
 		Entity* mFacebookButton;
 		SoundButton* mSoundButton;
 		MusicButton* mMusicButton;
 		CreditsButton* mCreditsButton;
+		Entity* mBestScorePanel;
 
 		Difficult* mDifficultScreen;
 

@@ -14,6 +14,7 @@ INCLUDES =  -I../ \
 			-I../Classes/Managers \
 			-I../Classes/Entities \
 			-I../Classes/Utils \
+			-I../Classes/Graphics \
 			-I$(COCOS2DX_PATH) \
 			-I$(COCOS2DX_PATH)/platform/third_party/linux \
 			-I$(COCOS2DX_PATH)/platform/third_party/linux/libfreetype2 \
@@ -32,6 +33,7 @@ INCLUDES =  -I../ \
 DEFINES = -DLINUX
 
 OBJECTS = ./main.o \
+			../Classes/Options.o \
 			../Classes/AppDelegate.o \
 			../Classes/Entities/Entity.o \
 			../Classes/Managers/EntityManager.o \
@@ -41,6 +43,7 @@ OBJECTS = ./main.o \
 			../Classes/Screens/MainMenu.o \
 			../Classes/Screens/Difficult.o \
 			../Classes/Utils/Utils.o \
+			../Classes/Graphics/Texture.o \
 
 LBITS := $(shell getconf LONG_BIT)
 ifeq ($(LBITS),64)

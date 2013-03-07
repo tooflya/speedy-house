@@ -11,8 +11,10 @@ void PopupScreen::init(CCNode* pParent)
 	}
 
 	this->mIsAttached = false;
+	this->mAnimationNeedShow = false;
+	this->mAnimationNeedHide = false;
 
-	this->mBackgroundCircle = new Entity(240, 160, "circle.png", this);
+	this->mBackgroundCircle = new Entity("circle.png", this);
 	this->mBackgroundCircle->setScale(2);
 
 	this->mAnimationTimeElapsed = 0;
@@ -25,6 +27,14 @@ void PopupScreen::init(CCNode* pParent)
 
 	this->mAnimationElements = new EntityManager(100, new Spiral(), this);
 	
+	this->mAnimationElementsTexture1 = new Texture("popup-sprite-1.png", 6, 1);
+	this->mAnimationElementsTexture2 = new Texture("popup-sprite-2.png", 4, 1);
+	this->mAnimationElementsTexture3 = new Texture("popup-sprite-3.png", 4, 1);
+	this->mAnimationElementsTexture4 = new Texture("popup-sprite-4.png", 4, 1);
+	this->mAnimationElementsTexture5 = new Texture("popup-sprite-5.png", 4, 1);
+	this->mAnimationElementsTexture6 = new Texture("popup-sprite-6.png", 4, 1);
+	this->mAnimationElementsTexture7 = new Texture("popup-sprite-7.png", 4, 1);
+
 	this->scheduleUpdate();
 }
 
@@ -73,7 +83,30 @@ EntityManager* PopupScreen::getPopupScreenElements()
 
 void PopupScreen::onShowStarted()
 {
-
+	switch(Utils::random(1, 7))
+	{
+		case 1:
+			this->mAnimationElements->changeTexture(this->mAnimationElementsTexture1);
+		break;
+		case 2:
+			this->mAnimationElements->changeTexture(this->mAnimationElementsTexture2);
+		break;
+		case 3:
+			this->mAnimationElements->changeTexture(this->mAnimationElementsTexture3);
+		break;
+		case 4:
+			this->mAnimationElements->changeTexture(this->mAnimationElementsTexture4);
+		break;
+		case 5:
+			this->mAnimationElements->changeTexture(this->mAnimationElementsTexture5);
+		break;
+		case 6:
+			this->mAnimationElements->changeTexture(this->mAnimationElementsTexture6);
+		break;
+		case 7:
+			this->mAnimationElements->changeTexture(this->mAnimationElementsTexture7);
+		break;
+	}
 }
 
 void PopupScreen::onShowFinished()
